@@ -1,0 +1,16 @@
+{
+	"content_scripts": [{
+		"matches": [
+			"*://services.runescape.com/m=hiscore/a=12/compare?user1=*",
+			"*://services.runescape.com/m=hiscore_oldschool/a=12/compare.ws"
+		],
+		"js": ["content.js"]
+	}],
+	"manifest_version": 2,
+	"name": "Runescape Hiscores Improvements",
+	"version": "0.1.0",
+
+	"description": "Change how aspects of the hiscores are displayed",
+
+	"permissions": ["tabs"]
+}
