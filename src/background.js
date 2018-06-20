@@ -1,4 +1,4 @@
-chrome.pageAction.onClicked.addListener(tab => {
+chrome.browserAction.onClicked.addListener(tab => {
 	chrome.tabs.query({
 		"active": true,
 		"lastFocusedWindow": true
@@ -10,10 +10,10 @@ chrome.pageAction.onClicked.addListener(tab => {
 	});
 });
 
-function checkForValidUrl(tabId, changeInfo, tab) {
-	if (tab.url.match(/https?:\/\/services.runescape.com\/m=hiscore(_oldschool)?\/a=12\/compare(\?user1=|\.ws)/gi)) {
-		chrome.pageAction.show(tabId);
-	}
-};
-
-chrome.tabs.onUpdated.addListener(checkForValidUrl);
+// function checkForValidUrl(tabId, changeInfo, tab) {
+// 	if (tab.url.match(/https?:\/\/services.runescape.com\/m=hiscore(_oldschool)?\/a=12\/compare(\?user1=|\.ws)/gi)) {
+// 		chrome.pageAction.show(tabId);
+// 	}
+// };
+//
+// chrome.tabs.onUpdated.addListener(checkForValidUrl);

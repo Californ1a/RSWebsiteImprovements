@@ -18,11 +18,12 @@
 	"homepage_url": "https://github.com/Californ1a/RSHiscoreImprovements",
 
 	"permissions": ["tabs"],
-	"page_action": {
+	"browser_action": {
 		"default_icon": {
 			"16": "assets/skillicon-16.png",
 			"48": "assets/skillicon-48.png"
-		}
+		},
+		"default_popup": "src/popup/index.html"
 	},
 	"icons": {
 		"16": "assets/skillicon-16.png",
