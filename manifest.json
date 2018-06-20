@@ -10,14 +10,19 @@
 		"js": ["src/content.js"]
 	}],
 	"manifest_version": 2,
-	"name": "Runescape Hiscores Improvements",
+	"name": "Runescape Hiscore Improvements",
 	"version": "0.2.0",
+	"author": "Californ1a",
 
-	"description": "Improve the RS Hiscores!",
+	"description": "Improve the RS Hiscores! Toggle viewing virtual levels on both RS3 and OSRS hiscores.",
+	"homepage_url": "https://github.com/Californ1a/RSHiscoreImprovements",
 
 	"permissions": ["tabs"],
-	"browser_action": {
-		"default_icon": "assets/skillicon-16.png"
+	"page_action": {
+		"default_icon": {
+			"16": "assets/skillicon-16.png",
+			"48": "assets/skillicon-48.png"
+		}
 	},
 	"icons": {
 		"16": "assets/skillicon-16.png",
