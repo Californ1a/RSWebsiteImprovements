@@ -11,7 +11,7 @@
 	}],
 	"manifest_version": 2,
 	"name": "Runescape Hiscore Improvements",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"author": "Californ1a",
 
 	"description": "Improve the RS Hiscores! Toggle viewing virtual levels on both RS3 and OSRS hiscores.",
