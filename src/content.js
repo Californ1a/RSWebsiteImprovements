@@ -108,7 +108,7 @@ function RS3Loop(skills) {
 			let xpIndex = (i <= 83) ? i - 1 : i + 1;
 			const xp = parseInt(skills[xpIndex].children[0].text.replace(/,/g, ""));
 			let virtualLevel = level.text;
-			for (let j = 1; j < XP_TABLE.length; j++) {
+			for (let j = 0; j < XP_TABLE.length; j++) {
 				if (xp > XP_TABLE[j].xp) {
 					virtualLevel = XP_TABLE[j].level;
 				}
@@ -149,7 +149,7 @@ function OSLoop(skills, start) {
 			let xpIndex = i + 1;
 			const xp = parseInt(skills[xpIndex].innerText.replace(/,/g, ""));
 			let virtualLevel = level.innerText;
-			for (let j = 1; j < XP_TABLE.length; j++) {
+			for (let j = 0; j < XP_TABLE.length; j++) {
 				if (xp > XP_TABLE[j].xp) {
 					virtualLevel = XP_TABLE[j].level;
 				}
