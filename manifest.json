@@ -13,7 +13,7 @@
 	"name": "Runescape Hiscores Improvements",
 	"version": "0.2.0",
 
-	"description": "Change how aspects of the hiscores are displayed",
+	"description": "Improve the RS Hiscores!",
 
 	"permissions": ["tabs"],
 	"browser_action": {
