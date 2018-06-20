@@ -1,13 +1,13 @@
 {
 	"background": {
-		"scripts": ["background.js"]
+		"scripts": ["src/background.js"]
 	},
 	"content_scripts": [{
 		"matches": [
 			"*://services.runescape.com/m=hiscore/a=12/compare?user1=*",
 			"*://services.runescape.com/m=hiscore_oldschool/a=12/compare.ws"
 		],
-		"js": ["content.js"]
+		"js": ["src/content.js"]
 	}],
 	"manifest_version": 2,
 	"name": "Runescape Hiscores Improvements",
@@ -17,6 +17,6 @@
 
 	"permissions": ["tabs"],
 	"browser_action": {
-		"default_icon": "skillicon.png"
+		"default_icon": "assets/skillicon.png"
 	}
 }
