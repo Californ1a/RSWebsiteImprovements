@@ -84,6 +84,15 @@ const XP_TABLE = [{
 	}
 ];
 
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+	let skills = document.getElementsByTagName("td");
+	if (request.url.includes("oldschool")) {
+		OSRS(skills);
+	} else {
+		RS3(skills);
+	}
+});
+
 function changeValue(s, i, v) {
 	if (s[i].children[0].children[0]) {
 		s[i].children[0].children[0].innerHTML = v.toLocaleString();
@@ -92,14 +101,7 @@ function changeValue(s, i, v) {
 	}
 }
 
-let skills = document.getElementsByTagName("td");
-if (skills[200]) {
-	OSRS();
-} else {
-	RS3();
-}
-
-function RS3Loop() {
+function RS3Loop(skills) {
 	for (let i = 2; i < skills.length; i++) {
 		let level = (skills[i].children[0].children[0]) ? skills[i].children[0].children[0] : skills[i].children[0];
 		if (level.text === "99") {
@@ -119,28 +121,28 @@ function RS3Loop() {
 	}
 }
 
-function RS3Total(skill) {
-	let u1TotalLevel = (skill[2].children[0].children[0]) ? skill[2].children[0].children[0] : skill[2].children[0];
-	let u2TotalLevel = (skill[84].children[0].children[0]) ? skill[84].children[0].children[0] : skill[84].children[0];
+function RS3Total(skills) {
+	let u1TotalLevel = (skills[2].children[0].children[0]) ? skills[2].children[0].children[0] : skills[2].children[0];
+	let u2TotalLevel = (skills[84].children[0].children[0]) ? skills[84].children[0].children[0] : skills[84].children[0];
 	let virtualTotal = 0;
-	for (let i = 2; i < skill.length; i++) {
+	for (let i = 2; i < skills.length; i++) {
 		if (i !== 2 && i !== 84) {
-			let level = (skill[i].children[0].children[0]) ? skill[i].children[0].children[0] : skill[i].children[0];
+			let level = (skills[i].children[0].children[0]) ? skills[i].children[0].children[0] : skills[i].children[0];
 			virtualTotal += parseInt(level.text);
 		}
 		if (i !== 83) {
 			i = i + 2;
 		} else if (i === 83) {
-			changeValue(skill, 2, virtualTotal);
+			changeValue(skills, 2, virtualTotal);
 			virtualTotal = 0;
 		}
 		if (i > 164) {
-			changeValue(skill, 84, virtualTotal);
+			changeValue(skills, 84, virtualTotal);
 		}
 	}
 }
 
-function OSLoop(start) {
+function OSLoop(skills, start) {
 	for (let i = start; i < skills.length; i++) {
 		let level = skills[i];
 		if (level.innerText === "99") {
@@ -162,16 +164,15 @@ function OSLoop(start) {
 	}
 }
 
-function OSTotal(skill, start) {
+function OSTotal(skills, start) {
 	let total = 0;
-	for (let i = start; i < skill.length; i++) {
-		let level = skill[i];
+	for (let i = start; i < skills.length; i++) {
+		let level = skills[i];
 		if (i !== 30 && i !== 36 && i < 290) {
 			total += parseInt(level.innerText);
-			console.log("total", total, "level", level.innerText);
 		}
 		if (i >= 290) {
-			skill[start].innerHTML = total.toLocaleString();
+			skills[start].innerHTML = total.toLocaleString();
 			break;
 		} else {
 			i = i + 10;
@@ -179,16 +180,16 @@ function OSTotal(skill, start) {
 	}
 }
 
-function RS3() {
-	RS3Loop();
-	let skill = document.getElementsByTagName("td");
-	RS3Total(skill);
+function RS3(skills) {
+	RS3Loop(skills);
+	skills = document.getElementsByTagName("td");
+	RS3Total(skills);
 }
 
-function OSRS() {
-	OSLoop(30);
-	OSLoop(36);
-	let skill = document.getElementsByTagName("td");
-	OSTotal(skill, 30);
-	OSTotal(skill, 36);
+function OSRS(skills) {
+	OSLoop(skills, 30);
+	OSLoop(skills, 36);
+	skills = document.getElementsByTagName("td");
+	OSTotal(skills, 30);
+	OSTotal(skills, 36);
 }
