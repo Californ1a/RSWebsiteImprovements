@@ -157,7 +157,7 @@ function RS3Total(skills) {
 			changeValue(skills, 2, virtualTotal);
 			virtualTotal = 0;
 		}
-		if (i > 164) {
+		if (i > 164 && !isNaN(virtualTotal)) {
 			changeValue(skills, 84, virtualTotal);
 		}
 	}

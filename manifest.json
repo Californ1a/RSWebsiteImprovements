@@ -6,6 +6,8 @@
 		"matches": [
 			"*://services.runescape.com/m=hiscore/a=12/compare?user1=*",
 			"*://services.runescape.com/m=hiscore/a=12/compare?category_type=-1&user1=*",
+			"*://services.runescape.com/m=hiscore/compare?category_type=-1&user1=*",
+			"*://services.runescape.com/m=hiscore/compare?user1=*",
 			"*://services.runescape.com/m=hiscore_oldschool/a=12/compare.ws",
 			"*://services.runescape.com/m=hiscore_oldschool/a=12/hiscorepersonal.ws"
 		],
@@ -13,7 +15,7 @@
 	}],
 	"manifest_version": 2,
 	"name": "Runescape Hiscore Improvements",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"author": "Californ1a",
 
 	"description": "Improve the RS Hiscores! Toggle viewing virtual levels on both RS3 and OSRS hiscores.",

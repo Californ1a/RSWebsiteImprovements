@@ -11,7 +11,7 @@
 // });
 
 function checkForValidUrl(tabId, changeInfo, tab) {
-	if (tab.url.match(/https?:\/\/services.runescape.com\/m=hiscore(_oldschool)?\/a=12\/(compare|hiscorepersonal)(\?(category_type=-1&)?(user1=)|\.ws)(.+)?/gi)) {
+	if (tab.url.match(/https?:\/\/services.runescape.com\/m=hiscore(_oldschool)?(\/a=12)?\/(compare|hiscorepersonal)(\?(category_type=-1&)?(user1=)|\.ws)(.+)?/gi)) {
 		chrome.tabs.query({
 			"active": true,
 			"lastFocusedWindow": true
