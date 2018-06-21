@@ -5,7 +5,8 @@
 	"content_scripts": [{
 		"matches": [
 			"*://services.runescape.com/m=hiscore/a=12/compare?user1=*",
-			"*://services.runescape.com/m=hiscore_oldschool/a=12/compare.ws"
+			"*://services.runescape.com/m=hiscore_oldschool/a=12/compare.ws",
+			"*://services.runescape.com/m=hiscore_oldschool/a=12/hiscorepersonal.ws"
 		],
 		"js": ["src/content.js"]
 	}],
