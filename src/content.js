@@ -84,11 +84,14 @@ const XP_TABLE = [{
 	}
 ];
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.storage.sync.get({
+	rs3Virt: false,
+	osrsVirt: false
+}, (items) => {
 	let skills = document.getElementsByTagName("td");
-	if (request.url.includes("oldschool")) {
+	if (skills.length > 300 && items.osrsVirt) {
 		OSRS(skills);
-	} else {
+	} else if (items.rs3Virt) {
 		RS3(skills);
 	}
 });
