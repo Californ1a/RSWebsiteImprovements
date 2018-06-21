@@ -17,7 +17,7 @@
 	"description": "Improve the RS Hiscores! Toggle viewing virtual levels on both RS3 and OSRS hiscores.",
 	"homepage_url": "https://github.com/Californ1a/RSHiscoreImprovements",
 
-	"permissions": ["tabs"],
+	"permissions": ["tabs", "storage"],
 	"browser_action": {
 		"default_icon": {
 			"16": "assets/skillicon-16.png",
