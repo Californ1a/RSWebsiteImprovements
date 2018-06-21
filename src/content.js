@@ -84,6 +84,24 @@ const XP_TABLE = [{
 	}
 ];
 
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+	let skills = document.getElementsByTagName("td");
+	chrome.storage.sync.get({
+		rs3Virt: false,
+		osrsVirt: false
+	}, (items) => {
+		if (items.osrsVirt) {
+			if (request.tab.url.includes("oldschool") && request.tab.url.includes("compare")) {
+				OSRS(skills);
+			} else if (request.tab.url.includes("oldschool") && request.tab.url.includes("hiscorepersonal")) {
+				OSRSolo(skills);
+			}
+		} else if (items.rs3Virt) {
+			RS3(skills);
+		}
+	});
+});
+
 chrome.storage.sync.get({
 	rs3Virt: false,
 	osrsVirt: false
@@ -145,7 +163,7 @@ function RS3Total(skills) {
 	}
 }
 
-function OSLoop(skills, start) {
+function OSLoop(skills, start, skip, iskip) {
 	for (let i = start; i < skills.length; i++) {
 		let level = skills[i];
 		if (level.innerText === "99") {
@@ -159,26 +177,28 @@ function OSLoop(skills, start) {
 			}
 			level.innerHTML = virtualLevel.toLocaleString();
 		}
-		if (i >= 290) {
+		if (i >= iskip) {
 			break;
 		} else {
-			i = i + 10;
+			i = i + skip;
 		}
 	}
 }
 
-function OSTotal(skills, start) {
+function OSTotal(skills, start, skip, iskip, solo = false) {
 	let total = 0;
 	for (let i = start; i < skills.length; i++) {
 		let level = skills[i];
-		if (i !== 30 && i !== 36 && i < 290) {
+		if (solo && i !== start && i < iskip) {
+			total += parseInt(level.innerText);
+		} else if (!solo && (i !== 30 && i !== 36) && i < iskip) {
 			total += parseInt(level.innerText);
 		}
-		if (i >= 290) {
+		if (i >= iskip) {
 			skills[start].innerHTML = total.toLocaleString();
 			break;
 		} else {
-			i = i + 10;
+			i = i + skip;
 		}
 	}
 }
@@ -190,9 +210,15 @@ function RS3(skills) {
 }
 
 function OSRS(skills) {
-	OSLoop(skills, 30);
-	OSLoop(skills, 36);
+	OSLoop(skills, 30, 10, 290);
+	OSLoop(skills, 36, 10, 290);
 	skills = document.getElementsByTagName("td");
-	OSTotal(skills, 30);
-	OSTotal(skills, 36);
+	OSTotal(skills, 30, 10, 290);
+	OSTotal(skills, 36, 10, 290);
+}
+
+function OSRSolo(skills) {
+	OSLoop(skills, 15, 4, 131);
+	skills = document.getElementsByTagName("td");
+	OSTotal(skills, 15, 4, 131, true);
 }
