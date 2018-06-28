@@ -149,15 +149,20 @@ function RS3Total(skills) {
 	for (let i = 2; i < skills.length; i++) {
 		if (i !== 2 && i !== 84) {
 			let level = (skills[i].children[0].children[0]) ? skills[i].children[0].children[0] : skills[i].children[0];
-			virtualTotal += parseInt(level.text);
+			if (!isNaN(level.text)) {
+				virtualTotal += parseInt(level.text);
+			}
+			console.log(level.text, virtualTotal);
 		}
 		if (i !== 83) {
 			i = i + 2;
 		} else if (i === 83) {
+			virtualTotal = (virtualTotal === 0) ? u1TotalLevel.text : virtualTotal;
 			changeValue(skills, 2, virtualTotal);
 			virtualTotal = 0;
 		}
 		if (i > 164 && !isNaN(virtualTotal)) {
+			virtualTotal = (virtualTotal === 0) ? u2TotalLevel.text : virtualTotal;
 			changeValue(skills, 84, virtualTotal);
 		}
 	}
