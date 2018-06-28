@@ -8,3 +8,5 @@ Improve the functionality of the RS Hiscores with this chrome extension.
 * Separate options to enable on RS3 and OSRS hiscore pages
   * RS3 compare page (same page as solo)
   * OSRS compare and solo pages
+
+https://chrome.google.com/webstore/detail/runescape-hiscore-improve/ndfndghofhfepimjbnnfanjpbnkdhgpf
