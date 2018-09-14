@@ -11,17 +11,17 @@
 // });
 
 function checkForValidUrl(tabId, changeInfo, tab) {
-	if (tab.url.match(/^https?:\/\/services.runescape.com\/m=hiscore(_oldschool)?(\/a=\d+)?\/(compare|hiscorepersonal)(\?(category_type=-1&)?(user1=)|\.ws)(.+)?$/gi)) {
+	if (tab.url.match(/^https?:\/\/secure.runescape.com\/m=hiscore(_oldschool)?(\/a=\d+)?\/(compare|hiscorepersonal)(\?(category_type=-1&)?(user1=)|\.ws)(.+)?$/gi)) {
 		chrome.tabs.query({
 			"active": true,
 			"lastFocusedWindow": true
 		}, (tabs) => {
-			let msg = {
+			const msg = {
 				tab: tabs[0]
 			};
 			chrome.tabs.sendMessage(tab.id, msg);
 		});
 	}
-};
+}
 
 chrome.tabs.onUpdated.addListener(checkForValidUrl);
