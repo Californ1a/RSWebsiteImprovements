@@ -4,18 +4,18 @@
 	},
 	"content_scripts": [{
 		"matches": [
-			"*://secure.runescape.com/m=hiscore/a=*/compare?user1=*",
-			"*://secure.runescape.com/m=hiscore/a=*/compare?category_type=-1&user1=*",
-			"*://secure.runescape.com/m=hiscore/compare?category_type=-1&user1=*",
-			"*://secure.runescape.com/m=hiscore/compare?user1=*",
-			"*://secure.runescape.com/m=hiscore_oldschool/a=*/compare.ws*",
-			"*://secure.runescape.com/m=hiscore_oldschool/a=*/hiscorepersonal.ws*"
+			"*://secure.runescape.com/m=hiscore/a=*/c=*/compare?user1=*",
+			"*://secure.runescape.com/m=hiscore/a=*/c=*/compare?category_type=-1&user1=*",
+			"*://secure.runescape.com/m=hiscore/c=*/compare?category_type=-1&user1=*",
+			"*://secure.runescape.com/m=hiscore/c=*/compare?user1=*",
+			"*://secure.runescape.com/m=hiscore_oldschool/a=*/c=*/compare.ws*",
+			"*://secure.runescape.com/m=hiscore_oldschool/a=*/c=*/hiscorepersonal.ws*"
 		],
 		"js": ["src/content.js"]
 	}],
 	"manifest_version": 2,
 	"name": "Runescape Hiscore Improvements",
-	"version": "0.4.5",
+	"version": "0.4.6",
 	"author": "Californ1a",
 
 	"description": "Improve the RS Hiscores! Toggle viewing virtual levels on both RS3 and OSRS hiscores.",
