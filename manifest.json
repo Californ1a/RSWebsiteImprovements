@@ -4,12 +4,18 @@
 	},
 	"content_scripts": [{
 		"matches": [
+			"*://secure.runescape.com/m=hiscore/a=*/compare?user1=*",
 			"*://secure.runescape.com/m=hiscore/a=*/c=*/compare?user1=*",
+			"*://secure.runescape.com/m=hiscore/a=*/compare?category_type=-1&user1=*",
 			"*://secure.runescape.com/m=hiscore/a=*/c=*/compare?category_type=-1&user1=*",
-			"*://secure.runescape.com/m=hiscore/c=*/compare?category_type=-1&user1=*",
-			"*://secure.runescape.com/m=hiscore/c=*/compare?user1=*",
+			"*://secure.runescape.com/m=hiscore/compare?category_type=-1&user1=*",
+			"*://secure.runescape.com/m=hiscore/compare?user1=*",
+			"*://secure.runescape.com/m=hiscore_oldschool/a=*/compare.ws*",
 			"*://secure.runescape.com/m=hiscore_oldschool/a=*/c=*/compare.ws*",
-			"*://secure.runescape.com/m=hiscore_oldschool/a=*/c=*/hiscorepersonal.ws*"
+			"*://secure.runescape.com/m=hiscore_oldschool/compare.ws*",
+			"*://secure.runescape.com/m=hiscore_oldschool/a=*/hiscorepersonal.ws*",
+			"*://secure.runescape.com/m=hiscore_oldschool/a=*/c=*/hiscorepersonal.ws*",
+			"*://secure.runescape.com/m=hiscore_oldschool/hiscorepersonal.ws*"
 		],
 		"js": ["src/content.js"]
 	}],
