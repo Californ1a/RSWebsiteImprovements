@@ -22,7 +22,7 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 			};
 			chrome.tabs.sendMessage(tab.id, msg);
 		});
-	} else if (tab.url.match(/^https?:\/\/services.runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?results.*$/gi)) {
+	} else if (tab.url.match(/^https?:\/\/services.runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?(results|top100|catalogue).*$/gi)) {
 		chrome.tabs.query({
 			"active": true,
 			"lastFocusedWindow": true
@@ -30,6 +30,17 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 			const msg = {
 				tab: tabs[0],
 				type: "market"
+			};
+			chrome.tabs.sendMessage(tab.id, msg);
+		});
+	} else if (tab.url.match(/^^https?:\/\/services.runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?.*\/viewitem.*$/gi)) {
+		chrome.tabs.query({
+			"active": true,
+			"lastFocusedWindow": true
+		}, (tabs) => {
+			const msg = {
+				tab: tabs[0],
+				type: "item"
 			};
 			chrome.tabs.sendMessage(tab.id, msg);
 		});
