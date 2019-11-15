@@ -17,7 +17,19 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 			"lastFocusedWindow": true
 		}, (tabs) => {
 			const msg = {
-				tab: tabs[0]
+				tab: tabs[0],
+				type: "hiscore"
+			};
+			chrome.tabs.sendMessage(tab.id, msg);
+		});
+	} else if (tab.url.match(/^https?:\/\/services.runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?results.*$/gi)) {
+		chrome.tabs.query({
+			"active": true,
+			"lastFocusedWindow": true
+		}, (tabs) => {
+			const msg = {
+				tab: tabs[0],
+				type: "market"
 			};
 			chrome.tabs.sendMessage(tab.id, msg);
 		});

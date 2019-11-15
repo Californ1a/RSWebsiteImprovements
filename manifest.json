@@ -5,17 +5,21 @@
 	"content_scripts": [{
 		"matches": [
 			"*://secure.runescape.com/m=hiscore/*",
-			"*://secure.runescape.com/m=hiscore_oldschool/*"
+			"*://secure.runescape.com/m=hiscore_oldschool/*",
+			"*://services.runescape.com/m=itemdb_rs/*"
 		],
 		"js": ["src/content.js"]
 	}],
+	"web_accessible_resources": [
+		"assets/wiki.jpg"
+	],
 	"manifest_version": 2,
-	"name": "Runescape Hiscore Improvements",
-	"version": "0.4.9",
+	"name": "Runescape Website Improvements",
+	"version": "0.5.0",
 	"author": "Californ1a",
 
-	"description": "Improve the RS Hiscores! Toggle viewing virtual levels on both RS3 and OSRS hiscores.",
-	"homepage_url": "https://github.com/Californ1a/RSHiscoreImprovements",
+	"description": "Improve the RS website! Toggle virtual levels on RS3 and OSRS hiscores, and add wiki links to GE market search.",
+	"homepage_url": "https://github.com/Californ1a/RSWebsiteImprovements",
 
 	"permissions": ["tabs", "storage"],
 	"browser_action": {
