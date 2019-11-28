@@ -9,10 +9,11 @@
 // 		chrome.tabs.sendMessage(tab.id, msg);
 // 	});
 // });
+const browse = chrome;
 
 function checkForValidUrl(tabId, changeInfo, tab) {
 	if (tab.url.match(/^https?:\/\/secure.runescape.com\/m=hiscore(_oldschool)?(\/a=\d+)?(\/c=[A-z0-9]+)?\/(compare|hiscorepersonal)(\?(category_type=-1&)?(user1=)|\.ws)(.+)?$/gi)) {
-		chrome.tabs.query({
+		browse.tabs.query({
 			"active": true,
 			"lastFocusedWindow": true
 		}, (tabs) => {
@@ -20,10 +21,11 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 				tab: tabs[0],
 				type: "hiscore"
 			};
-			chrome.tabs.sendMessage(tab.id, msg);
+			// console.log("title", tab.title, "id", tab.id);
+			browse.tabs.sendMessage(tab.id, msg);
 		});
 	} else if (tab.url.match(/^https?:\/\/services.runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?(results|top100|catalogue).*$/gi)) {
-		chrome.tabs.query({
+		browse.tabs.query({
 			"active": true,
 			"lastFocusedWindow": true
 		}, (tabs) => {
@@ -31,10 +33,10 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 				tab: tabs[0],
 				type: "market"
 			};
-			chrome.tabs.sendMessage(tab.id, msg);
+			browse.tabs.sendMessage(tab.id, msg);
 		});
 	} else if (tab.url.match(/^^https?:\/\/services.runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?.*\/viewitem.*$/gi)) {
-		chrome.tabs.query({
+		browse.tabs.query({
 			"active": true,
 			"lastFocusedWindow": true
 		}, (tabs) => {
@@ -42,9 +44,9 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 				tab: tabs[0],
 				type: "item"
 			};
-			chrome.tabs.sendMessage(tab.id, msg);
+			browse.tabs.sendMessage(tab.id, msg);
 		});
 	}
 }
 
-chrome.tabs.onUpdated.addListener(checkForValidUrl);
+browse.tabs.onUpdated.addListener(checkForValidUrl);

@@ -65,14 +65,15 @@ const XP_TABLE = [{
 }];
 // #endregion XP_TABLE
 
+const browse = chrome;
 const wiki = "http://runescape.wiki/w/Special:Search?search=";
-const img = chrome.runtime.getURL("assets/wiki.jpg");
+const img = browser.runtime.getURL("assets/wiki.jpg");
 let time = 0;
 
-chrome.runtime.onMessage.addListener((request) => {
+browse.runtime.onMessage.addListener((request) => {
 	if (request.type === "hiscore") {
 		const skills = document.getElementsByTagName("td");
-		chrome.storage.sync.get({
+		browse.storage.sync.get({
 			rs3Virt: true,
 			osrsVirt: true
 		}, (items) => {
@@ -87,7 +88,7 @@ chrome.runtime.onMessage.addListener((request) => {
 			}
 		});
 	} else if (request.type === "market") {
-		chrome.storage.sync.get({
+		browse.storage.sync.get({
 			wikiLinks: true
 		}, (items) => {
 			if (!items.wikiLinks) {
@@ -96,7 +97,7 @@ chrome.runtime.onMessage.addListener((request) => {
 			market();
 		});
 	} else if (request.type === "item") {
-		chrome.storage.sync.get({
+		browse.storage.sync.get({
 			wikiLinks: true
 		}, (items) => {
 			if (!items.wikiLinks) {

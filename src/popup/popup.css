@@ -1,6 +1,11 @@
 body {
 	width: 151px;
 	user-select: none;
+	font-family: "Segoe UI", Tahoma, sans-serif;
+	font-size: 75%;
+	display: block;
+	margin: 8px;
+	overflow-x: hidden;
 }
 
 #status {
@@ -21,6 +26,7 @@ body {
 	from {
 		opacity: 1;
 	}
+
 	to {
 		opacity: 0;
 	}

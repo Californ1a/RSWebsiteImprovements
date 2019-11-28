@@ -33,5 +33,10 @@
 		"16": "assets/skillicon-16.png",
 		"48": "assets/skillicon-48.png",
 		"128": "assets/skillicon-128.png"
+	},
+	"applications": {
+		"gecko": {
+			"id": "rs-site-improve@californ1a.github.io"
+		}
 	}
 }
