@@ -65,23 +65,93 @@ const XP_TABLE = [{
 }];
 // #endregion XP_TABLE
 
+const wiki = "http://runescape.wiki/w/Special:Search?search=";
+const img = chrome.runtime.getURL("assets/wiki.jpg");
+let time = 0;
+
 chrome.runtime.onMessage.addListener((request) => {
-	const skills = document.getElementsByTagName("td");
-	chrome.storage.sync.get({
-		rs3Virt: false,
-		osrsVirt: false
-	}, (items) => {
-		if (items.osrsVirt && request.tab.url.includes("oldschool")) {
-			if (request.tab.url.includes("oldschool") && request.tab.url.includes("compare")) {
-				OSRS(skills);
-			} else if (request.tab.url.includes("oldschool") && request.tab.url.includes("hiscorepersonal")) {
-				OSRSolo(skills);
+	if (request.type === "hiscore") {
+		const skills = document.getElementsByTagName("td");
+		chrome.storage.sync.get({
+			rs3Virt: true,
+			osrsVirt: true
+		}, (items) => {
+			if (items.osrsVirt && request.tab.url.includes("oldschool")) {
+				if (request.tab.url.includes("oldschool") && request.tab.url.includes("compare")) {
+					OSRS(skills);
+				} else if (request.tab.url.includes("oldschool") && request.tab.url.includes("hiscorepersonal")) {
+					OSRSolo(skills);
+				}
+			} else if (items.rs3Virt && !request.tab.url.includes("oldschool")) {
+				RS3(skills);
 			}
-		} else if (items.rs3Virt && !request.tab.url.includes("oldschool")) {
-			RS3(skills);
-		}
-	});
+		});
+	} else if (request.type === "market") {
+		chrome.storage.sync.get({
+			wikiLinks: true
+		}, (items) => {
+			if (!items.wikiLinks) {
+				return;
+			}
+			market();
+		});
+	} else if (request.type === "item") {
+		chrome.storage.sync.get({
+			wikiLinks: true
+		}, (items) => {
+			if (!items.wikiLinks) {
+				return;
+			}
+			item();
+		});
+	}
 });
+
+function item() {
+	const head = document.getElementsByClassName("item-description")[0];
+	const a = document.createElement("a");
+	a.href = wiki + encodeURIComponent(head.children[0].innerText);
+	a.target = "_blank";
+	const wikiNode = `<img src="${img}" width="32px" style="border-radius:8px;top:-8px;right:8px" />`;
+	a.innerHTML = wikiNode;
+	head.appendChild(a);
+}
+
+function market() {
+	if (time) {
+		return;
+	}
+	const table = document.getElementsByTagName("table")[0];
+	if (!table) {
+		return;
+	}
+	const wikiHead = document.createElement("th");
+	wikiHead.style.padding = "10px";
+	wikiHead.appendChild(document.createTextNode("Wiki"));
+	const headRow = table.children[0].children.length - 1;
+	table.children[0].children[headRow].appendChild(wikiHead);
+
+	const rows = table.children[1].children;
+	for (let i = 0; i < rows.length; i++) {
+		const itemName = rows[i].children[0].children[0].children[0].title;
+		const wikiLink = wiki + encodeURIComponent(itemName);
+		// console.log(wikiLink);
+		const wikiNode = `<a href="${wikiLink}" target="_blank"><img src="${img}" width="32px" style="border-radius:8px;" /></a>`;
+		const td = document.createElement("td");
+		td.innerHTML = wikiNode;
+		td.style.paddingLeft = "17px";
+		if (headRow) {
+			const span = rows[i].children[0].children[0].children[1];
+			span.style = "width:0;white-space:nowrap;";
+			if ((span.innerText.includes("...") && span.innerText.length > 21) || span.innerText.length >= 17) {
+				span.innerText = `${span.innerText.replace("...", "").slice(0, -7)}...`.replace(" ...", "...");
+			}
+		}
+		td.classList.add("memberItem");
+		table.children[1].children[i].appendChild(td);
+	}
+	time = 1;
+}
 
 function changeValue(s, i, v) {
 	if (s[i].children[0].children[0]) {
