@@ -29,7 +29,7 @@ function restoreOptions(options) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-	const names = ["rs3Virt", "osrsVirt", "wikiLinks"];
+	const names = ["rs3Virt", "osrsVirt", "wikiLinks", "newsPin"];
 	const selectors = [];
 	for (const name of names) {
 		selectors.push(document.querySelector(`input[name=${name}]`));

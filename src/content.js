@@ -104,6 +104,34 @@ chrome.runtime.onMessage.addListener((request) => {
 			}
 			item();
 		});
+	} else if (request.type === "news") {
+		// const time = document.getElementsByTagName("time");
+		// if (time[0].dateTime < time[1].dateTime) {
+		chrome.storage.sync.get({
+			newsPin: true
+		}, (items) => {
+			if (!items.newsPin) {
+				return;
+			}
+			console.log("abc");
+			// const style = document.createElement("style");
+			// style.appendChild(document.createTextNode(""));
+			// document.head.appendChild(style);
+			const sheet = document.styleSheets[document.styleSheets.length - 1];
+			const style = `{
+					content: '📌';
+					float: left;
+					font-size: 13pt;
+					color: transparent;
+					text-shadow: 0 0 0 #e1bb34;
+				}`;
+			if (request.tab.url.includes("news")) {
+				sheet.insertRule(`.index article:first-child::before ${style}`);
+			} else {
+				sheet.insertRule(`.index article:first-child::before ${style}`);
+			}
+		});
+		// }
 	}
 });
 
@@ -140,13 +168,13 @@ function market() {
 		const td = document.createElement("td");
 		td.innerHTML = wikiNode;
 		td.style.paddingLeft = "17px";
-		if (headRow) {
-			const span = rows[i].children[0].children[0].children[1];
-			span.style = "width:0;white-space:nowrap;";
-			if ((span.innerText.includes("...") && span.innerText.length > 21) || span.innerText.length >= 17) {
-				span.innerText = `${span.innerText.replace("...", "").slice(0, -7)}...`.replace(" ...", "...");
-			}
+		// if (headRow) {
+		const span = rows[i].children[0].children[0].children[1];
+		span.style = "width:0;white-space:nowrap;";
+		if ((span.innerText.includes("...") && span.innerText.length > 21) || span.innerText.length >= 17) {
+			span.innerText = `${span.innerText.replace("...", "").slice(0, -7)}...`.replace(" ...", "...");
 		}
+		// }
 		td.classList.add("memberItem");
 		table.children[1].children[i].appendChild(td);
 	}

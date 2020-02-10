@@ -6,7 +6,9 @@
 		"matches": [
 			"*://secure.runescape.com/m=hiscore/*",
 			"*://secure.runescape.com/m=hiscore_oldschool/*",
-			"*://services.runescape.com/m=itemdb_rs/*"
+			"*://services.runescape.com/m=itemdb_rs/*",
+			"*://www.runescape.com/*",
+			"*://secure.runescape.com/m=news/*"
 		],
 		"js": ["src/content.js"]
 	}],
@@ -15,7 +17,7 @@
 	],
 	"manifest_version": 2,
 	"name": "Runescape Website Improvements",
-	"version": "0.5.1",
+	"version": "0.5.2",
 	"author": "Californ1a",
 
 	"description": "Improve the RS website! Toggle virtual levels on RS3 and OSRS hiscores, and add wiki links to GE market search.",
