@@ -126,10 +126,16 @@ function changeValue(s, i, v) {
 	}
 }
 
+const changes = {
+	u1: [],
+	u2: []
+};
+
 function RS3Loop(skills) {
+	// console.log(XP_TABLE);
 	for (let i = 2; i < skills.length; i++) {
 		const level = (skills[i].children[0].children[0]) ? skills[i].children[0].children[0] : skills[i].children[0];
-		if (level.text === "99") {
+		if (level.text === "99" || (level.text === "120" && (i === 83 || i === 165))) {
 			const xpIndex = (i <= 83) ? i - 1 : i + 1;
 			const xp = parseInt(skills[xpIndex].children[0].text.replace(/,/g, ""));
 			let virtualLevel = level.text;
@@ -139,6 +145,12 @@ function RS3Loop(skills) {
 					virtualLevel = XP_TABLE[type][j].level;
 				}
 			}
+			const change = (type === "elite") ? virtualLevel - 120 : virtualLevel - 99;
+			const user = (i > 83) ? "u2" : "u1";
+			changes[user].push({
+				index: i,
+				change
+			});
 			changeValue(skills, i, virtualLevel);
 		}
 		if (i !== 83) {
@@ -150,25 +162,20 @@ function RS3Loop(skills) {
 function RS3Total(skills) {
 	const u1TotalLevel = (skills[2].children[0].children[0]) ? skills[2].children[0].children[0] : skills[2].children[0];
 	const u2TotalLevel = (skills[84].children[0].children[0]) ? skills[84].children[0].children[0] : skills[84].children[0];
-	let virtualTotal = 0;
-	for (let i = 2; i < skills.length; i++) {
-		if (i !== 2 && i !== 84) {
-			const level = (skills[i].children[0].children[0]) ? skills[i].children[0].children[0] : skills[i].children[0];
-			if (!isNaN(level.text)) {
-				virtualTotal += parseInt(level.text);
-			}
-			//console.log(level.text, virtualTotal);
+
+	// console.log(changes);
+	if (u1TotalLevel.text !== "--") {
+		const virtualTotal = parseInt(u1TotalLevel.text.replace(/,/g, ""));
+		if (virtualTotal) {
+			const newVirTotal = changes.u1.reduce((acc, curr) => curr.change + acc, virtualTotal);
+			changeValue(skills, 2, newVirTotal);
 		}
-		if (i !== 83) {
-			i = i + 2;
-		} else if (i === 83) {
-			virtualTotal = (virtualTotal === 0) ? u1TotalLevel.text : virtualTotal;
-			changeValue(skills, 2, virtualTotal);
-			virtualTotal = 0;
-		}
-		if (i > 164 && !isNaN(virtualTotal)) {
-			virtualTotal = (virtualTotal === 0) ? u2TotalLevel.text : virtualTotal;
-			changeValue(skills, 84, virtualTotal);
+	}
+	if (u2TotalLevel.text !== "--") {
+		const virtualTotal = parseInt(u2TotalLevel.text.replace(/,/g, ""));
+		if (virtualTotal) {
+			const newVirTotal = changes.u2.reduce((acc, curr) => curr.change + acc, virtualTotal);
+			changeValue(skills, 84, newVirTotal);
 		}
 	}
 }
