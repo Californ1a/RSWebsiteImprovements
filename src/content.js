@@ -1,72 +1,9 @@
-// #region XP_TABLE
-const XP_TABLE = [{
-	level: 100,
-	xp: 14391160
-}, {
-	level: 101,
-	xp: 15889109
-}, {
-	level: 102,
-	xp: 17542976
-}, {
-	level: 103,
-	xp: 19368992
-}, {
-	level: 104,
-	xp: 21385073
-}, {
-	level: 105,
-	xp: 23611006
-}, {
-	level: 106,
-	xp: 26068632
-}, {
-	level: 107,
-	xp: 28782069
-}, {
-	level: 108,
-	xp: 31777943
-}, {
-	level: 109,
-	xp: 35085654
-}, {
-	level: 110,
-	xp: 38717661
-}, {
-	level: 111,
-	xp: 42769801
-}, {
-	level: 112,
-	xp: 47221641
-}, {
-	level: 113,
-	xp: 52136869
-}, {
-	level: 114,
-	xp: 57563718
-}, {
-	level: 115,
-	xp: 63555443
-}, {
-	level: 116,
-	xp: 70170840
-}, {
-	level: 117,
-	xp: 77474828
-}, {
-	level: 118,
-	xp: 85539082
-}, {
-	level: 119,
-	xp: 94442737
-}, {
-	level: 120,
-	xp: 104273167
-}];
-// #endregion XP_TABLE
-
 const wiki = "http://runescape.wiki/w/Special:Search?search=";
 const img = chrome.runtime.getURL("assets/wiki.jpg");
+let XP_TABLE = chrome.runtime.getURL("src/XP_TABLE.json");
+fetch(XP_TABLE).then(res => res.json()).then(json => {
+	XP_TABLE = json;
+});
 let time = 0;
 
 chrome.runtime.onMessage.addListener((request) => {
@@ -196,9 +133,10 @@ function RS3Loop(skills) {
 			const xpIndex = (i <= 83) ? i - 1 : i + 1;
 			const xp = parseInt(skills[xpIndex].children[0].text.replace(/,/g, ""));
 			let virtualLevel = level.text;
-			for (let j = 0; j < XP_TABLE.length; j++) {
-				if (xp > XP_TABLE[j].xp) {
-					virtualLevel = XP_TABLE[j].level;
+			const type = (i === 83 || i === 165) ? "elite" : "standard";
+			for (let j = 0; j < XP_TABLE[type].length; j++) {
+				if (xp > XP_TABLE[type][j].xp) {
+					virtualLevel = XP_TABLE[type][j].level;
 				}
 			}
 			changeValue(skills, i, virtualLevel);
@@ -242,9 +180,9 @@ function OSLoop(skills, start, skip, iskip) {
 			const xpIndex = i + 1;
 			const xp = parseInt(skills[xpIndex].innerText.replace(/,/g, ""));
 			let virtualLevel = level.innerText;
-			for (let j = 0; j < XP_TABLE.length; j++) {
-				if (xp > XP_TABLE[j].xp) {
-					virtualLevel = XP_TABLE[j].level;
+			for (let j = 0; j < XP_TABLE.standard.length; j++) {
+				if (xp > XP_TABLE.standard[j].xp) {
+					virtualLevel = XP_TABLE.standard[j].level;
 				}
 			}
 			level.innerHTML = virtualLevel.toLocaleString();

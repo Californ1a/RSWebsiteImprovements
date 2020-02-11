@@ -13,7 +13,8 @@
 		"js": ["src/content.js"]
 	}],
 	"web_accessible_resources": [
-		"assets/wiki.jpg"
+		"assets/wiki.jpg",
+		"src/XP_TABLE.json"
 	],
 	"manifest_version": 2,
 	"name": "Runescape Website Improvements",
