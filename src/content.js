@@ -135,25 +135,25 @@ function RS3Loop(skills) {
 	// console.log(XP_TABLE);
 	for (let i = 2; i < skills.length; i++) {
 		const level = (skills[i].children[0].children[0]) ? skills[i].children[0].children[0] : skills[i].children[0];
-		if (level.text === "99" || (level.text === "120" && (i === 83 || i === 165))) {
-			const xpIndex = (i <= 83) ? i - 1 : i + 1;
+		if (level.text === "99" || (level.text === "120" && (i === 83 || i === 168))) {
+			const xpIndex = (i <= 86) ? i - 1 : i + 1;
 			const xp = parseInt(skills[xpIndex].children[0].text.replace(/,/g, ""));
 			let virtualLevel = level.text;
-			const type = (i === 83 || i === 165) ? "elite" : "standard";
+			const type = (i === 83 || i === 168) ? "elite" : "standard";
 			for (let j = 0; j < XP_TABLE[type].length; j++) {
 				if (xp > XP_TABLE[type][j].xp) {
 					virtualLevel = XP_TABLE[type][j].level;
 				}
 			}
 			const change = (type === "elite") ? virtualLevel - 120 : virtualLevel - 99;
-			const user = (i > 83) ? "u2" : "u1";
+			const user = (i > 86) ? "u2" : "u1";
 			changes[user].push({
 				index: i,
 				change
 			});
 			changeValue(skills, i, virtualLevel);
 		}
-		if (i !== 83) {
+		if (i !== 86) {
 			i = i + 2;
 		}
 	}
@@ -161,7 +161,7 @@ function RS3Loop(skills) {
 
 function RS3Total(skills) {
 	const u1TotalLevel = (skills[2].children[0].children[0]) ? skills[2].children[0].children[0] : skills[2].children[0];
-	const u2TotalLevel = (skills[84].children[0].children[0]) ? skills[84].children[0].children[0] : skills[84].children[0];
+	const u2TotalLevel = (skills[87].children[0].children[0]) ? skills[87].children[0].children[0] : skills[87].children[0];
 
 	// console.log(changes);
 	if (u1TotalLevel.text !== "--") {
@@ -175,7 +175,7 @@ function RS3Total(skills) {
 		const virtualTotal = parseInt(u2TotalLevel.text.replace(/,/g, ""));
 		if (virtualTotal) {
 			const newVirTotal = changes.u2.reduce((acc, curr) => curr.change + acc, virtualTotal);
-			changeValue(skills, 84, newVirTotal);
+			changeValue(skills, 87, newVirTotal);
 		}
 	}
 }
