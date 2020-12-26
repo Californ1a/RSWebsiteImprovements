@@ -130,6 +130,7 @@ const changes = {
 	u1: [],
 	u2: []
 };
+let running = false;
 
 function RS3Loop(skills) {
 	// console.log(XP_TABLE);
@@ -162,12 +163,15 @@ function RS3Loop(skills) {
 function RS3Total(skills) {
 	const u1TotalLevel = (skills[2].children[0].children[0]) ? skills[2].children[0].children[0] : skills[2].children[0];
 	const u2TotalLevel = (skills[87].children[0].children[0]) ? skills[87].children[0].children[0] : skills[87].children[0];
-
-	// console.log(changes);
+	// console.log("skills", skills);
+	// console.log("u1TotalLevel", u1TotalLevel.innerText);
+	// console.log("u2TotalLevel", u2TotalLevel.innerText);
 	if (u1TotalLevel.text !== "--") {
 		const virtualTotal = parseInt(u1TotalLevel.text.replace(/,/g, ""));
 		if (virtualTotal) {
 			const newVirTotal = changes.u1.reduce((acc, curr) => curr.change + acc, virtualTotal);
+			// console.log("virtualTotal", virtualTotal);
+			// console.log("newVirTotal", newVirTotal);
 			changeValue(skills, 2, newVirTotal);
 		}
 	}
@@ -175,6 +179,8 @@ function RS3Total(skills) {
 		const virtualTotal = parseInt(u2TotalLevel.text.replace(/,/g, ""));
 		if (virtualTotal) {
 			const newVirTotal = changes.u2.reduce((acc, curr) => curr.change + acc, virtualTotal);
+			// console.log("virtualTotal", virtualTotal);
+			// console.log("newVirTotal", newVirTotal);
 			changeValue(skills, 87, newVirTotal);
 		}
 	}
@@ -221,9 +227,14 @@ function OSTotal(skills, start, skip, iskip, solo = false) {
 }
 
 function RS3(skills) {
+	if (running) {
+		return;
+	}
+	running = true;
 	RS3Loop(skills);
 	skills = document.getElementsByTagName("td");
 	RS3Total(skills);
+	running = false;
 }
 
 function OSRS(skills) {
