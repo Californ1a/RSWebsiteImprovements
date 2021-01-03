@@ -22,7 +22,7 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 			};
 			chrome.tabs.sendMessage(tab.id, msg);
 		});
-	} else if (tab.url.match(/^https?:\/\/services.runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?(results|top100|catalogue).*$/gi)) {
+	} else if (tab.url.match(/^https?:\/\/(services|secure).runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?(results|top100|catalogue).*$/gi)) {
 		chrome.tabs.query({
 			"active": true,
 			"lastFocusedWindow": true
@@ -33,7 +33,7 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 			};
 			chrome.tabs.sendMessage(tab.id, msg);
 		});
-	} else if (tab.url.match(/^https?:\/\/services.runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?.*\/viewitem.*$/gi)) {
+	} else if (tab.url.match(/^https?:\/\/(services|secure).runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?.*\/viewitem.*$/gi)) {
 		chrome.tabs.query({
 			"active": true,
 			"lastFocusedWindow": true
@@ -44,7 +44,7 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 			};
 			chrome.tabs.sendMessage(tab.id, msg);
 		});
-	} else if (tab.url.match(/^https?:\/\/(secure|www)\.runescape.com\/(community|m=news)?\/?(list)?$/gi)) {
+	} else if (tab.url.match(/^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/?(list)?$/gi)) {
 		chrome.tabs.query({
 			"active": true,
 			"lastFocusedWindow": true

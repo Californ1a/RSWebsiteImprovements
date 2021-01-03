@@ -4,11 +4,7 @@
 	},
 	"content_scripts": [{
 		"matches": [
-			"*://secure.runescape.com/m=hiscore/*",
-			"*://secure.runescape.com/m=hiscore_oldschool/*",
-			"*://services.runescape.com/m=itemdb_rs/*",
-			"*://www.runescape.com/*",
-			"*://secure.runescape.com/m=news/*"
+			"*://*.runescape.com/*"
 		],
 		"js": ["src/content.js"]
 	}],
