@@ -1,9 +1,6 @@
 const wiki = "http://runescape.wiki/w/Special:Search?search=";
 const img = chrome.runtime.getURL("assets/wiki.jpg");
-let XP_TABLE = chrome.runtime.getURL("src/XP_TABLE.json");
-fetch(XP_TABLE).then(res => res.json()).then(json => {
-	XP_TABLE = json;
-});
+const TABLE = chrome.runtime.getURL("src/XP_TABLE.json");
 let time = 0;
 
 chrome.runtime.onMessage.addListener((request) => {
@@ -132,8 +129,10 @@ const changes = {
 };
 let running = false;
 
-function RS3Loop(skills) {
-	// console.log(XP_TABLE);
+async function RS3Loop(skills) {
+	const table = await fetch(TABLE);
+	const XP_TABLE = await table.json();
+	console.log(XP_TABLE);
 	for (let i = 2; i < skills.length; i++) {
 		const level = (skills[i].children[0].children[0]) ? skills[i].children[0].children[0] : skills[i].children[0];
 		if (level.text === "99" || (level.text === "120" && (i === 83 || i === 168))) {
@@ -186,7 +185,9 @@ function RS3Total(skills) {
 	}
 }
 
-function OSLoop(skills, start, skip, iskip) {
+async function OSLoop(skills, start, skip, iskip) {
+	const table = await fetch(TABLE);
+	const XP_TABLE = await table.json();
 	for (let i = start; i < skills.length; i++) {
 		const level = skills[i];
 		if (level.innerText === "99") {
@@ -226,27 +227,27 @@ function OSTotal(skills, start, skip, iskip, solo = false) {
 	}
 }
 
-function RS3(skills) {
+async function RS3(skills) {
 	if (running) {
 		return;
 	}
 	running = true;
-	RS3Loop(skills);
+	await RS3Loop(skills);
 	skills = document.getElementsByTagName("td");
 	RS3Total(skills);
 	running = false;
 }
 
-function OSRS(skills) {
-	OSLoop(skills, 30, 10, 290);
-	OSLoop(skills, 36, 10, 290);
+async function OSRS(skills) {
+	await OSLoop(skills, 30, 10, 290);
+	await OSLoop(skills, 36, 10, 290);
 	skills = document.getElementsByTagName("td");
 	OSTotal(skills, 30, 10, 290);
 	OSTotal(skills, 36, 10, 290);
 }
 
-function OSRSolo(skills) {
-	OSLoop(skills, 15, 4, 131);
+async function OSRSolo(skills) {
+	await OSLoop(skills, 15, 4, 131);
 	skills = document.getElementsByTagName("td");
 	OSTotal(skills, 15, 4, 131, true);
 }
