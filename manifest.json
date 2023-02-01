@@ -1,27 +1,33 @@
 {
 	"background": {
-		"scripts": ["src/background.js"]
+		"service_worker": "src/background.js"
 	},
 	"content_scripts": [{
 		"matches": [
 			"*://*.runescape.com/*"
 		],
-		"js": ["src/content.js"]
+		"js": ["src/content.js"],
+		"css": ["src/content.css"]
 	}],
-	"web_accessible_resources": [
-		"assets/wiki.jpg",
-		"src/XP_TABLE.json"
-	],
-	"manifest_version": 2,
+	"web_accessible_resources": [{
+		"resources": [
+			"assets/wiki.jpg",
+			"src/XP_TABLE.json"
+		],
+		"matches": [
+			"*://*.runescape.com/*"
+		]
+	}],
+	"manifest_version": 3,
 	"name": "Runescape Website Improvements",
-	"version": "0.5.7",
+	"version": "0.5.8",
 	"author": "Californ1a",
 
 	"description": "Improve the RS website! Toggle virtual levels on RS3 and OSRS hiscores, and add wiki links to GE market search.",
 	"homepage_url": "https://github.com/Californ1a/RSWebsiteImprovements",
 
 	"permissions": ["tabs", "storage"],
-	"browser_action": {
+	"action": {
 		"default_icon": {
 			"16": "assets/skillicon-16.png",
 			"48": "assets/skillicon-48.png"
