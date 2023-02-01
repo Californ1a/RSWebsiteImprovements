@@ -37,84 +37,84 @@ chrome.runtime.onMessage.addListener(async (request) => {
 		item();
 	} else if (request.type === "news") {
 
-		const sidebar = document.querySelector("main aside.sidebar");
-		const wikiNews = document.createElement("section");
-		wikiNews.classList.add("sidebar-module");
-		sidebar.appendChild(wikiNews);
-		const header = document.createElement("h3");
-		header.innerText = "Social News";
-		wikiNews.appendChild(header);
-
-		const res = await fetch("https://api.weirdgloop.org/runescape/social");
-		const json = await res.json();
-
-		// console.log("[CAL]", json);
-
-		const ul = document.createElement("ul");
-		ul.classList.add("news-list");
-		wikiNews.appendChild(ul);
-
-		for (const item of json.data) {
-			let icon = "";
-			if (!item.source) {
-				item.source = (new URL(item.url)).hostname.split(".")[1];
-			}
-			if (item.source === "runescape") {
-				continue;
-			}
-			if (item.icon) {
-				const s = item.source;
-				icon = `<img src="${item.icon}" alt="${s[0].toUpperCase() + s.slice(1)} logo" class="news-icon">`;
-			} else if (item.source === "twitter") {
-				icon = "<img src=\"https://runescape.wiki/images/thumb/Twitter_news_icon.svg/240px-Twitter_news_icon.svg.png\" alt=\"Twitter logo\" class=\"news-icon\">";
-			} else if (item.source === "reddit") {
-				icon = "<img src=\"https://runescape.wiki/images/thumb/Reddit_news_icon.svg/240px-Reddit_news_icon.svg.png\" alt=\"Reddit logo\" class=\"news-icon\">";
-			} else if (item.source === "youtube") {
-				icon = "<img src=\"https://www.youtube.com/s/desktop/8049ee3e/img/favicon_96x96.png\" alt=\"Youtube logo\" class=\"news-icon\">";
-			} else if (item.source === "twitch") {
-				icon = "<img src=\"https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png\" alt=\"Twitch logo\" class=\"news-icon\">";
-			}
-			const date = formatDate((item.datePublished) ? item.datePublished : item.dateAdded);
-			const newsItem = `<a class="news-item" title="${item.title}" href="${item.url}" target="_blank">
-				${icon}
-				<span class="news-title">${item.title}</span>
-				<time class="news-date" datetime="${date[0]}" title="${date[2]}">${date[1]}</time>
-				<br>
-				<span class="news-snippet">
-					${(item.image)?`<img class="news-image" src="${item.image}" alt="article image">`:""}
-					${item.excerpt}
-				</span>
-			</a>`;
-			const li = document.createElement("li");
-			li.innerHTML = newsItem;
-			ul.appendChild(li);
-		}
-
-		// const time = document.getElementsByTagName("time");
-		// if (time[0].dateTime < time[1].dateTime) {
 		const items = await chrome.storage.sync.get({
-			newsPin: true
+			newsPin: true,
+			socialNews: true
 		});
-		if (!items.newsPin) {
-			return;
+
+		if (items.socialNews) {
+			const sidebar = document.querySelector("main aside.sidebar");
+			const wikiNews = document.createElement("section");
+			wikiNews.classList.add("sidebar-module");
+			sidebar.appendChild(wikiNews);
+			const header = document.createElement("h3");
+			header.innerText = "Social News";
+			wikiNews.appendChild(header);
+
+			const res = await fetch("https://api.weirdgloop.org/runescape/social");
+			const json = await res.json();
+
+			// console.log("[CAL]", json);
+
+			const ul = document.createElement("ul");
+			ul.classList.add("news-list");
+			wikiNews.appendChild(ul);
+
+			for (const item of json.data) {
+				let icon = "";
+				item.source = item.source ?? (new URL(item.url)).hostname.split(".")[1];
+				if (item.source === "runescape") continue;
+
+				if (item.icon) {
+					const s = item.source;
+					icon = `<img src="${item.icon}" alt="${s[0].toUpperCase() + s.slice(1)} logo" class="news-icon">`;
+				} else if (item.source === "twitter") {
+					icon = "<img src=\"https://runescape.wiki/images/thumb/Twitter_news_icon.svg/240px-Twitter_news_icon.svg.png\" alt=\"Twitter logo\" class=\"news-icon\">";
+				} else if (item.source === "reddit") {
+					icon = "<img src=\"https://runescape.wiki/images/thumb/Reddit_news_icon.svg/240px-Reddit_news_icon.svg.png\" alt=\"Reddit logo\" class=\"news-icon\">";
+				} else if (item.source === "youtube") {
+					icon = "<img src=\"https://www.youtube.com/s/desktop/8049ee3e/img/favicon_96x96.png\" alt=\"Youtube logo\" class=\"news-icon\">";
+				} else if (item.source === "twitch") {
+					icon = "<img src=\"https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png\" alt=\"Twitch logo\" class=\"news-icon\">";
+				}
+				const date = formatDate((item.datePublished) ? item.datePublished : item.dateAdded);
+				const newsItem = `<a class="news-item" title="${item.title}" href="${item.url}" target="_blank">
+					${icon}
+					<span class="news-title">${item.title}</span>
+					<time class="news-date" datetime="${date[0]}" title="${date[2]}">${date[1]}</time>
+					<br>
+					<span class="news-snippet">
+						${(item.image)?`<img class="news-image" src="${item.image}" alt="article image">`:""}
+						${item.excerpt}
+					</span>
+				</a>`;
+				const li = document.createElement("li");
+				li.innerHTML = newsItem;
+				ul.appendChild(li);
+			}
 		}
-		// const style = document.createElement("style");
-		// style.appendChild(document.createTextNode(""));
-		// document.head.appendChild(style);
-		const sheet = document.styleSheets[document.styleSheets.length - 1];
-		const style = `{
-				content: '📌';
-				float: left;
-				font-size: 13pt;
-				color: transparent;
-				text-shadow: 0 0 0 #e1bb34;
-			}`;
-		if (request.tab.url.includes("news")) {
-			sheet.insertRule(`.index article:first-child::before ${style}`);
-		} else {
-			sheet.insertRule(`.index article:first-child::before ${style}`);
+
+		if (items.newsPin) {
+			// const time = document.getElementsByTagName("time");
+			// if (time[0].dateTime < time[1].dateTime) {
+			// const style = document.createElement("style");
+			// style.appendChild(document.createTextNode(""));
+			// document.head.appendChild(style);
+			const sheet = document.styleSheets[document.styleSheets.length - 1];
+			const style = `{
+					content: '📌';
+					float: left;
+					font-size: 13pt;
+					color: transparent;
+					text-shadow: 0 0 0 #e1bb34;
+				}`;
+			if (request.tab.url.includes("news")) {
+				sheet.insertRule(`.index article:first-child::before ${style}`);
+			} else {
+				sheet.insertRule(`.index article:first-child::before ${style}`);
+			}
+			// }
 		}
-		// }
 	}
 	return true;
 });

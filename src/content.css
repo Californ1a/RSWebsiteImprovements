@@ -23,7 +23,7 @@ ul.news-list {
 
 .news-list .news-item:hover {
 	color: #cbd9f4;
-	background: #2f3d57;
+	background: #2f3d5788;
 }
 
 .news-list .news-icon {
@@ -58,8 +58,8 @@ ul.news-list {
 
 .news-list .news-image {
 	display: block;
-	/* margin: -23px 0.5em 0.5em 1em; */
-	margin: 0 0.5em 0.5em 1em;
+	margin: -23px 0.5em 0.5em 1em;
+	/* margin: 0 0.5em 0.5em 1em; */
 	max-height: 75px;
 	max-width: initial;
 	border-radius: 5px;

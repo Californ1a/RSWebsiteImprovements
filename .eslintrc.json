@@ -1,12 +1,12 @@
 {
 	"env": {
-		"es6": true,
+		"es2021": true,
 		"webextensions": true,
 		"browser": true
 	},
 	"extends": "eslint:recommended",
 	"parserOptions": {
-		"ecmaVersion": 9,
+		"ecmaVersion": 13,
 		"sourceType": "module",
 		"ecmaFeatures": {
 			"experimentalObjectRestSpread": true
@@ -43,7 +43,7 @@
 		],
 		"no-template-curly-in-string": "error",
 		"block-scoped-var": "error",
-		"curly": ["error", "all"],
+		"curly": ["error", "multi-line"],
 		"eqeqeq": ["error", "always"],
 		"no-floating-decimal": "error",
 		"no-use-before-define": [
