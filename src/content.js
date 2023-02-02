@@ -1,15 +1,44 @@
 const wiki = "http://runescape.wiki/w/Special:Search?search=";
-const img = chrome.runtime.getURL("assets/wiki.jpg");
+const WIKI_IMG = chrome.runtime.getURL("assets/wiki.jpg");
 const TABLE = chrome.runtime.getURL("src/XP_TABLE.json");
+const urlMatchers = {
+	hiscore: /^https?:\/\/secure.runescape.com\/m=hiscore(_oldschool)?(\/a=\d+)?(\/c=[A-z0-9*-]+)?\/(compare|hiscorepersonal)(\?(category_type=-1&)?(user1=)|\.ws)(.+)?$/gi,
+	market: /^https?:\/\/(services|secure).runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?(results|top100|catalogue).*$/gi,
+	item: /^https?:\/\/(services|secure).runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?.*\/viewitem.*$/gi,
+	news: /^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/?(list)?$/gi
+};
 let time = 0;
 
-chrome.runtime.onMessage.addListener(async (request) => {
+(async function main() {
+	const tab = {
+		url: window.location.href
+	};
+	let msg;
+
+	for (const key in urlMatchers) {
+		if (!tab.url.match(urlMatchers[key])) continue;
+		msg = {
+			type: key,
+			tab
+		};
+		break;
+	}
+
+	if (!msg) return;
+
+	await manageType(msg);
+})();
+
+async function manageType(request) {
+	const items = await chrome.storage.sync.get({
+		rs3Virt: true,
+		osrsVirt: true,
+		wikiLinks: true,
+		newsPin: true,
+		socialNews: true
+	});
 	if (request.type === "hiscore") {
 		const skills = document.getElementsByTagName("td");
-		const items = await chrome.storage.sync.get({
-			rs3Virt: true,
-			osrsVirt: true
-		});
 		if (items.osrsVirt && request.tab.url.includes("oldschool")) {
 			if (request.tab.url.includes("oldschool") && request.tab.url.includes("compare")) {
 				OSRS(skills);
@@ -20,103 +49,94 @@ chrome.runtime.onMessage.addListener(async (request) => {
 			RS3(skills);
 		}
 	} else if (request.type === "market") {
-		const items = await chrome.storage.sync.get({
-			wikiLinks: true
-		});
-		if (!items.wikiLinks) {
-			return;
-		}
+		if (!items.wikiLinks) return;
 		market();
 	} else if (request.type === "item") {
-		const items = await chrome.storage.sync.get({
-			wikiLinks: true
-		});
-		if (!items.wikiLinks) {
-			return;
-		}
+		if (!items.wikiLinks) return;
 		item();
 	} else if (request.type === "news") {
-
-		const items = await chrome.storage.sync.get({
-			newsPin: true,
-			socialNews: true
-		});
-
-		if (items.socialNews) {
-			const sidebar = document.querySelector("main aside.sidebar");
-			const wikiNews = document.createElement("section");
-			wikiNews.classList.add("sidebar-module");
-			sidebar.appendChild(wikiNews);
-			const header = document.createElement("h3");
-			header.innerText = "Social News";
-			wikiNews.appendChild(header);
-
-			const res = await fetch("https://api.weirdgloop.org/runescape/social");
-			const json = await res.json();
-
-			// console.log("[CAL]", json);
-
-			const ul = document.createElement("ul");
-			ul.classList.add("news-list");
-			wikiNews.appendChild(ul);
-
-			for (const item of json.data) {
-				let icon = "";
-				item.source = item.source ?? (new URL(item.url)).hostname.split(".")[1];
-				if (item.source === "runescape") continue;
-
-				if (item.icon) {
-					const s = item.source;
-					icon = `<img src="${item.icon}" alt="${s[0].toUpperCase() + s.slice(1)} logo" class="news-icon">`;
-				} else if (item.source === "twitter") {
-					icon = "<img src=\"https://runescape.wiki/images/thumb/Twitter_news_icon.svg/240px-Twitter_news_icon.svg.png\" alt=\"Twitter logo\" class=\"news-icon\">";
-				} else if (item.source === "reddit") {
-					icon = "<img src=\"https://runescape.wiki/images/thumb/Reddit_news_icon.svg/240px-Reddit_news_icon.svg.png\" alt=\"Reddit logo\" class=\"news-icon\">";
-				} else if (item.source === "youtube") {
-					icon = "<img src=\"https://www.youtube.com/s/desktop/8049ee3e/img/favicon_96x96.png\" alt=\"Youtube logo\" class=\"news-icon\">";
-				} else if (item.source === "twitch") {
-					icon = "<img src=\"https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png\" alt=\"Twitch logo\" class=\"news-icon\">";
-				}
-				const date = formatDate((item.datePublished) ? item.datePublished : item.dateAdded);
-				const newsItem = `<a class="news-item" title="${item.title}" href="${item.url}" target="_blank">
-					${icon}
-					<span class="news-title">${item.title}</span>
-					<time class="news-date" datetime="${date[0]}" title="${date[2]}">${date[1]}</time>
-					<br>
-					<span class="news-snippet">
-						${(item.image)?`<img class="news-image" src="${item.image}" alt="article image">`:""}
-						${item.excerpt}
-					</span>
-				</a>`;
-				const li = document.createElement("li");
-				li.innerHTML = newsItem;
-				ul.appendChild(li);
-			}
+		const socialNewsExists = Array.from(document.querySelectorAll("h3")).find(n => n.innerText === "Social News");
+		if (items.socialNews && !socialNewsExists) {
+			await createSocialNews();
 		}
 
 		if (items.newsPin) {
-			const time = document.getElementsByTagName("time");
-			const d1 = (new Date(time[0].dateTime)).getTime();
-			const d2 = (new Date(time[1].dateTime)).getTime();
-			if (d1 <= d2) {
-				const sheet = document.styleSheets[document.styleSheets.length - 1];
-				const style = `{
-						content: '📌';
-						float: left;
-						font-size: 13pt;
-						color: transparent;
-						text-shadow: 0 0 0 #e1bb34;
-					}`;
-				if (request.tab.url.includes("news")) {
-					sheet.insertRule(`.index article:first-child::before ${style}`);
-				} else {
-					sheet.insertRule(`.index article:first-child::before ${style}`);
-				}
-			}
+			createPin(request.tab.url);
 		}
 	}
-	return true;
-});
+}
+
+function createPin(url) {
+	const time = document.getElementsByTagName("time");
+	const d1 = (new Date(time[0].dateTime)).getTime();
+	const d2 = (new Date(time[1].dateTime)).getTime();
+	if (d1 > d2) return;
+	const sheet = document.styleSheets[document.styleSheets.length - 1];
+	const style = `{
+			content: '📌';
+			float: left;
+			font-size: 13pt;
+			color: transparent;
+			text-shadow: 0 0 0 #e1bb34;
+		}`;
+	if (url.includes("news")) {
+		sheet.insertRule(`.index article:first-child::before ${style}`);
+	} else {
+		sheet.insertRule(`.index article:first-child::before ${style}`);
+	}
+}
+
+async function createSocialNews() {
+	const sidebar = document.querySelector("main aside.sidebar");
+	const wikiNews = document.createElement("section");
+	wikiNews.classList.add("sidebar-module");
+	sidebar.appendChild(wikiNews);
+	const header = document.createElement("h3");
+	header.innerHTML = "<a href='https://rs.wiki/RS:NEWS' target='_blank'>Social News</a>";
+	wikiNews.appendChild(header);
+
+	const res = await fetch("https://api.weirdgloop.org/runescape/social");
+	const json = await res.json();
+
+	// console.log("[CAL]", json);
+
+	const ul = document.createElement("ul");
+	ul.classList.add("news-list");
+	wikiNews.appendChild(ul);
+
+	for (const item of json.data) {
+		let icon = "";
+		item.source = item.source ?? (new URL(item.url)).hostname.split(".")[1];
+		if (item.source === "runescape") continue;
+
+		if (item.icon) {
+			const s = item.source;
+			icon = `<img src="${item.icon}" alt="${s[0].toUpperCase() + s.slice(1)} logo" class="news-icon">`;
+		} else if (item.source === "twitter") {
+			icon = "<img src='https://runescape.wiki/images/thumb/Twitter_news_icon.svg/240px-Twitter_news_icon.svg.png' alt='Twitter logo' class='news-icon'>";
+		} else if (item.source === "reddit") {
+			icon = "<img src='https://runescape.wiki/images/thumb/Reddit_news_icon.svg/240px-Reddit_news_icon.svg.png' alt='Reddit logo' class='news-icon'>";
+		} else if (item.source === "youtube") {
+			icon = "<img src='https://www.youtube.com/s/desktop/8049ee3e/img/favicon_96x96.png' alt='Youtube logo' class='news-icon'>";
+		} else if (item.source === "twitch") {
+			icon = "<img src='https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png' alt='Twitch logo' class='news-icon'>";
+		}
+		const date = formatDate((item.datePublished) ? item.datePublished : item.dateAdded);
+		const newsItem = `<a class="news-item" title="${item.title}" href="${item.url}" target="_blank">
+			${icon}
+			<span class="news-title">${item.title}</span>
+			<time class="news-date" datetime="${date[0]}" title="${date[2]}">${date[1]}</time>
+			<br>
+			<span class="news-snippet">
+				${(item.image)?`<img class="news-image" src="${item.image}" alt="article image">`:""}
+				${item.excerpt}
+			</span>
+		</a>`;
+		const li = document.createElement("li");
+		li.innerHTML = newsItem;
+		ul.appendChild(li);
+	}
+}
 
 // in miliseconds
 const units = {
@@ -162,9 +182,10 @@ function formatDate(input) {
 function item() {
 	const head = document.getElementsByClassName("item-description")[0];
 	const a = document.createElement("a");
-	a.href = wiki + encodeURIComponent(head.children[0].innerText);
+	const name = head.children[0].innerText;
+	a.href = wiki + encodeURIComponent(name);
 	a.target = "_blank";
-	const wikiNode = `<img src="${img}" width="32px" style="border-radius:8px;top:-8px;right:8px" />`;
+	const wikiNode = `<img src="${WIKI_IMG}" width="32px" style="border-radius:8px;top:-8px;right:8px" title="rsw:${name}" />`;
 	a.innerHTML = wikiNode;
 	head.appendChild(a);
 }
@@ -187,17 +208,20 @@ function market() {
 	for (let i = 0; i < rows.length; i++) {
 		const itemName = rows[i].children[0].children[0].children[0].title;
 		const wikiLink = wiki + encodeURIComponent(itemName);
+
+		const itemImg = rows[i].children[0].children[0].children[0];
 		// console.log("[CAL]", wikiLink);
-		const wikiNode = `<a href="${wikiLink}" target="_blank"><img src="${img}" width="32px" style="border-radius:8px;" /></a>`;
+		const wikiNode = `<a href="${wikiLink}" target="_blank"><img src="${WIKI_IMG}" width="32px" style="border-radius:8px;" title="rsw:${itemImg.alt}" /></a>`;
 		const td = document.createElement("td");
 		td.innerHTML = wikiNode;
 		td.style.paddingLeft = "17px";
 		// if (headRow) {
 		const span = rows[i].children[0].children[0].children[1];
-		span.style = "width:0;white-space:nowrap;";
-		if ((span.innerText.includes("...") && span.innerText.length > 21) || span.innerText.length >= 17) {
-			span.innerText = `${span.innerText.replace("...", "").slice(0, -7)}...`.replace(" ...", "...");
+		span.style = "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;";
+		if (span.innerText.includes("...")) {
+			span.innerText = itemImg.alt;
 		}
+		span.title = itemImg.alt;
 		// }
 		td.classList.add("memberItem");
 		table.children[1].children[i].appendChild(td);

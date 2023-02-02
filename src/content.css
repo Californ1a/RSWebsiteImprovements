@@ -27,8 +27,8 @@ ul.news-list {
 }
 
 .news-list .news-icon {
-	max-width: 25px;
-	max-height: 25px;
+	max-width: 20px;
+	max-height: 20px;
 	float: left;
 	margin: 0 0.5em 0.3em 0;
 	overflow: hidden;
@@ -58,10 +58,11 @@ ul.news-list {
 
 .news-list .news-image {
 	display: block;
-	margin: -23px 0.5em 0.5em 1em;
+	margin: -20px 0.5em 0.5em 1em;
 	/* margin: 0 0.5em 0.5em 1em; */
-	max-height: 75px;
-	max-width: initial;
+	max-height: 50px;
+	max-width: 75px;
+	/* max-width: initial; */
 	border-radius: 5px;
 	float: right;
 	border: 0;
