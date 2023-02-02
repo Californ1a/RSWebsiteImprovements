@@ -1,0 +1,230 @@
+.c-news-article {
+	color: #d7dbe1;
+}
+
+#article-title {
+	color: #e1bb34;
+	font-family: cinzel;
+	font-size: 1.5rem;
+	font-weight: 700;
+	order: 2;
+	line-height: 2rem;
+}
+
+.c-news-article__details {
+	color: #a9acad;
+	font-family: MuseoSans;
+	order: 1;
+	font-size: 0.75rem;
+}
+
+time.c-news-article__date::after {
+	margin-left: 0.7rem;
+}
+
+time.c-news-article__date {
+	margin-right: 0.7rem;
+}
+
+.c-news-article__share {
+	order: 4;
+	width: 100%;
+}
+
+.c-news-article__content div.context {
+	margin-left: 0.25rem;
+	margin-right: 0.25rem;
+}
+
+article.c-news-article__main {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding-top: 1.2rem;
+}
+
+#article-content {
+	order: 3;
+	margin-bottom: 2rem;
+}
+
+#article-back-to-top {
+	margin-top: 1rem;
+	order: 5;
+}
+
+div.c-news-article__inner {
+	background: rgba(0, 0, 0, 0.2);
+	border-radius: 1rem 1rem 0 0;
+	flex-flow: row;
+	max-width: 75rem;
+}
+
+.c-news-article__feature {
+	order: 2;
+	margin-top: -1.5rem;
+	width: 100%;
+}
+
+#article-content>details>summary,
+#article-top>details>summary {
+	color: #ecedee;
+}
+
+#article-top>details>summary {
+	margin: 0;
+}
+
+#article-top>details {
+	padding-left: 0;
+}
+
+#article-top>details>*:not(summary) {
+	padding-left: 0.7rem;
+}
+
+#article-top>details>a>* {
+	padding-left: 0.7rem;
+}
+
+#article-top>.context>details>summary {
+	margin-right: 0px;
+}
+
+p {
+	margin-block-start: 0rem;
+	margin-block-end: 1.25rem;
+}
+
+div.c-news-article__content details {
+	margin: 0;
+	padding-bottom: 0;
+}
+
+#article-content>iframe,
+#article-top>iframe {
+	margin-bottom: 1rem;
+}
+
+iframe[src^="https://cdn.runescape.com/"] {
+	display: initial !important;
+	width: unset !important;
+	max-width: 43rem !important;
+	min-height: 32.5rem !important;
+}
+
+#game_news>p>img.context-image {
+	width: 100%;
+}
+
+div.c-news-article__content h1,
+div.c-news-article__content h2,
+div.c-news-article__content h3,
+div.c-news-article__content h4,
+div.c-news-article__content h5,
+div.c-news-article__content h6 {
+	margin-top: 0px;
+	margin-bottom: 1rem;
+	color: #e1bb34;
+}
+
+aside.m-news-aside {
+	max-width: 15rem;
+	margin-left: 0;
+	position: sticky;
+	top: 0.5rem;
+	background-color: rgba(255, 255, 255, 0.03);
+	margin-top: 1.25rem;
+	padding: 1rem;
+	border-radius: 0.5rem;
+}
+
+#view-more-news {
+	width: 100%;
+}
+
+nav.m-news-aside__socials {
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+a.m-news-aside__social {
+	width: 100%;
+}
+
+time.m-news-aside__related-article-date {
+	font-size: 0.75rem;
+	color: #a9acad;
+}
+
+h4.m-news-aside__related-article-title {
+	font-size: 0.9rem;
+}
+
+h3.m-news-aside__title {
+	margin-bottom: 0;
+}
+
+#game_news>p>img,
+#community>p>img {
+	margin: -0.7rem !important;
+}
+
+a[data-article-tab] {
+	flex: 1 1 auto !important;
+	text-align: center !important;
+}
+
+a[data-article-tab]+a[data-article-tab] {
+	border-left: solid 2px #26343e !important;
+}
+
+a.m-news-aside__related-article::after {
+	background: #2d4058;
+	height: 0.25rem;
+}
+
+.m-news-aside__socials>.a-social-button:nth-last-child(1) {
+	margin-bottom: 0;
+}
+
+h2,
+.h2 {
+	font-size: 1.3rem !important;
+}
+
+h3,
+.h3 {
+	font-size: 1.2rem !important;
+}
+
+.c-news-article__content ul,
+.c-news-article__content ol {
+	margin-left: 1.875rem !important;
+}
+
+.c-news-article__content details.category ul,
+.c-news-article__content details.category ol {
+	margin-left: 0.9375rem;
+}
+
+.c-news-article__content details.category h1,
+.c-news-article__content details.category h2,
+.c-news-article__content details.category h3,
+.c-news-article__content details.category h4,
+.c-news-article__content details.category h5,
+.c-news-article__content details.category h6 {
+	margin-top: 2rem;
+}
+
+.c-news-article__content details.category h3:first-of-type {
+	margin-top: 0;
+}
+
+#article-top details:first-of-type {
+	margin-top: 1rem;
+}
+
+#article-top details:last-of-type img {
+	margin-bottom: 0.3rem;
+}

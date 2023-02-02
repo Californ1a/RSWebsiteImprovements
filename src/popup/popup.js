@@ -27,7 +27,7 @@ async function restoreOptions(options) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-	const names = ["rs3Virt", "osrsVirt", "wikiLinks", "newsPin", "socialNews"];
+	const names = ["rs3Virt", "osrsVirt", "wikiLinks", "newsPin", "socialNews", "wideNews"];
 	const selectors = [];
 	for (const name of names) {
 		selectors.push(document.querySelector(`input[name=${name}]`));

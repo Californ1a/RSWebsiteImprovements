@@ -5,9 +5,18 @@ const urlMatchers = {
 	hiscore: /^https?:\/\/secure.runescape.com\/m=hiscore(_oldschool)?(\/a=\d+)?(\/c=[A-z0-9*-]+)?\/(compare|hiscorepersonal)(\?(category_type=-1&)?(user1=)|\.ws)(.+)?$/gi,
 	market: /^https?:\/\/(services|secure).runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?(results|top100|catalogue).*$/gi,
 	item: /^https?:\/\/(services|secure).runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?.*\/viewitem.*$/gi,
-	news: /^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/?(list)?$/gi
+	news: /^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/?(list)?$/gi,
+	article: /^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/.+$/gi
 };
 let time = 0;
+
+async function contentLoaded() {
+	await new Promise((resolve) => {
+		window.addEventListener("DOMContentLoaded", () => {
+			resolve();
+		});
+	});
+}
 
 (async function main() {
 	const tab = {
@@ -35,9 +44,11 @@ async function manageType(request) {
 		osrsVirt: true,
 		wikiLinks: true,
 		newsPin: true,
-		socialNews: true
+		socialNews: true,
+		wideNews: true
 	});
 	if (request.type === "hiscore") {
+		await contentLoaded();
 		const skills = document.getElementsByTagName("td");
 		if (items.osrsVirt && request.tab.url.includes("oldschool")) {
 			if (request.tab.url.includes("oldschool") && request.tab.url.includes("compare")) {
@@ -50,19 +61,31 @@ async function manageType(request) {
 		}
 	} else if (request.type === "market") {
 		if (!items.wikiLinks) return;
+		await contentLoaded();
 		market();
 	} else if (request.type === "item") {
 		if (!items.wikiLinks) return;
+		await contentLoaded();
 		item();
 	} else if (request.type === "news") {
+		await contentLoaded();
 		const socialNewsExists = Array.from(document.querySelectorAll("h3")).find(n => n.innerText === "Social News");
 		if (items.socialNews && !socialNewsExists) {
 			await createSocialNews();
 		}
-
 		if (items.newsPin) {
 			createPin(request.tab.url);
 		}
+	} else if (request.type === "article") {
+		if (!items.wideNews) return;
+		chrome.runtime.sendMessage({ text: "newsCSS" });
+		await contentLoaded();
+		const sidebar = document.querySelector("aside.m-news-aside");
+		const article = document.querySelector(".c-news-article__inner");
+		article.appendChild(sidebar);
+		const backToTop = document.querySelector("a#article-back-to-top");
+		sidebar.appendChild(backToTop);
+		backToTop.style.marginBottom = "unset";
 	}
 }
 

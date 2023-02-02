@@ -5,6 +5,22 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 		osrsVirt: true,
 		wikiLinks: true,
 		newsPin: true,
-		socialNews: true
+		socialNews: true,
+		wideNews: true
 	});
+});
+
+chrome.runtime.onMessage.addListener(async (msg, sender) => {
+	if (msg.text === "newsCSS") {
+		try {
+			await chrome.scripting.insertCSS({
+				files: ["src/news.css"],
+				target: {
+					tabId: sender.tab.id
+				}
+			});
+		} catch (e) {
+			console.error(e);
+		}
+	}
 });
