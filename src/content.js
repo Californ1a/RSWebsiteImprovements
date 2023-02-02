@@ -5,8 +5,8 @@ const urlMatchers = {
 	hiscore: /^https?:\/\/secure.runescape.com\/m=hiscore(_oldschool)?(\/a=\d+)?(\/c=[A-z0-9*-]+)?\/(compare|hiscorepersonal)(\?(category_type=-1&)?(user1=)|\.ws)(.+)?$/gi,
 	market: /^https?:\/\/(services|secure).runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?(results|top100|catalogue).*$/gi,
 	item: /^https?:\/\/(services|secure).runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?.*\/viewitem.*$/gi,
-	news: /^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/?(list)?$/gi,
-	article: /^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/.+$/gi
+	news: /^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/?(list|archive)?(.+)?$/gi,
+	article: /^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/((?!(list|archive)).)*$/gi
 };
 let time = 0;
 
@@ -82,7 +82,9 @@ async function manageType(request) {
 		await contentLoaded();
 		const sidebar = document.querySelector("aside.m-news-aside");
 		const article = document.querySelector(".c-news-article__inner");
-		article.appendChild(sidebar);
+		if (article) {
+			article.appendChild(sidebar);
+		}
 		const backToTop = document.querySelector("a#article-back-to-top");
 		sidebar.appendChild(backToTop);
 		backToTop.style.marginBottom = "unset";
@@ -111,21 +113,32 @@ function createPin(url) {
 
 async function createSocialNews() {
 	const sidebar = document.querySelector("main aside.sidebar");
+	const tabs = document.querySelector("#tabs");
+	const rect = tabs.getBoundingClientRect();
+	let totalHeight = 30;
+	for (const child of sidebar.children) {
+		totalHeight += child.getBoundingClientRect().height;
+	}
+	if (totalHeight > rect.height) return;
 	const wikiNews = document.createElement("section");
 	wikiNews.classList.add("sidebar-module");
 	sidebar.appendChild(wikiNews);
 	const header = document.createElement("h3");
 	header.innerHTML = "<a href='https://rs.wiki/RS:NEWS' target='_blank'>Social News</a>";
 	wikiNews.appendChild(header);
-
+	const remainingHeight = rect.height - totalHeight - header.getBoundingClientRect().height;
 	const res = await fetch("https://api.weirdgloop.org/runescape/social");
 	const json = await res.json();
 
 	// console.log("[CAL]", json);
 
+	const div = document.createElement("div");
+	div.style.maxHeight = `${remainingHeight}px`;
+	div.style.overflowY = "auto";
 	const ul = document.createElement("ul");
 	ul.classList.add("news-list");
-	wikiNews.appendChild(ul);
+	div.appendChild(ul);
+	wikiNews.appendChild(div);
 
 	for (const item of json.data) {
 		let icon = "";

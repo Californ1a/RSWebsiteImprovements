@@ -5,6 +5,7 @@ ul.news-list {
 	padding: 0;
 	cursor: pointer;
 	font-size: 1.4em;
+	overflow-y: auto;
 }
 
 .news-list li {
@@ -39,7 +40,7 @@ ul.news-list {
 .news-list .news-title {
 	font-size: 1em;
 	font-weight: bold;
-	color: #cbd9f4;
+	color: #b2dbee;
 }
 
 .news-list .news-date {
