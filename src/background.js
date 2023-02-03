@@ -1,6 +1,7 @@
 chrome.runtime.onInstalled.addListener(async (details) => {
 	if (details.reason !== "install") return;
 	await chrome.storage.sync.set({
+		refreshPage: "none",
 		rs3Virt: true,
 		osrsVirt: true,
 		wikiLinks: true,

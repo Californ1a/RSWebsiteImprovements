@@ -1,5 +1,5 @@
 body {
-	width: 160px;
+	width: 180px;
 	user-select: none;
 	overflow: hidden;
 }
@@ -97,4 +97,23 @@ input:checked+.slider:before {
 	width: 150px;
 	font-family: sans-serif;
 	font-size: 12px;
+}
+
+label.select {
+	display: flex;
+	flex-direction: row-reverse;
+	white-space: nowrap;
+	align-items: center;
+	justify-content: center;
+}
+
+.label.select {
+	padding-left: 5px;
+}
+
+select {
+	background: transparent;
+	color: #000;
+	font-size: 12px;
+	padding: 0;
 }

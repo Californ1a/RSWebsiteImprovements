@@ -2,13 +2,12 @@ const wiki = "http://runescape.wiki/w/Special:Search?search=";
 const WIKI_IMG = chrome.runtime.getURL("assets/wiki.jpg");
 const TABLE = chrome.runtime.getURL("src/XP_TABLE.json");
 const urlMatchers = {
-	hiscore: /^https?:\/\/secure.runescape.com\/m=hiscore(_oldschool)?(\/a=\d+)?(\/c=[A-z0-9*-]+)?\/(compare|hiscorepersonal)(\?(category_type=-1&)?(user1=)|\.ws)(.+)?$/gi,
+	hiscore: /^https?:\/\/secure.runescape.com\/m=hiscore(_oldschool|_seasonal|_ironman|_hardcore_ironman)?(\/a=\d+)?(\/c=[A-z0-9*-]+)?\/(compare|hiscorepersonal)(\?(category_type=-1&)?(user1=)|\.ws)(.+)?$/gi,
 	market: /^https?:\/\/(services|secure).runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?(results|top100|catalogue).*$/gi,
 	item: /^https?:\/\/(services|secure).runescape.com\/m=itemdb_rs\/(a=\d{1,3}\/)?.*\/viewitem.*$/gi,
-	news: /^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/?(list|archive)?(.+)?$/gi,
-	article: /^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/((?!(list|archive)).)*$/gi
+	article: /^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/((?!(list|archive)).)+$/gi,
+	news: /^https?:\/\/(secure|www)\.runescape.com\/(a=\d{1,3}\/)?(community|m=news)?\/?(list|archive)?(.+)?$/gi
 };
-let time = 0;
 
 async function contentLoaded() {
 	await new Promise((resolve) => {
@@ -39,14 +38,21 @@ async function contentLoaded() {
 })();
 
 async function manageType(request) {
-	const items = await chrome.storage.sync.get({
-		rs3Virt: true,
-		osrsVirt: true,
-		wikiLinks: true,
-		newsPin: true,
-		socialNews: true,
-		wideNews: true
-	});
+	const i = ["rs3Virt", "osrsVirt", "wikiLinks", "newsPin", "socialNews", "wideNews"];
+	const items = await chrome.storage.sync.get(i);
+
+	// save the items that don't exist
+	const toSave = {};
+	for (const item of i) {
+		if (items[item] === undefined) {
+			toSave[item] = true;
+			items[item] = true;
+		}
+	}
+	if (Object.keys(toSave).length > 0) {
+		await chrome.storage.sync.set(toSave);
+	}
+
 	if (request.type === "hiscore") {
 		await contentLoaded();
 		const skills = document.getElementsByTagName("td");
@@ -67,15 +73,6 @@ async function manageType(request) {
 		if (!items.wikiLinks) return;
 		await contentLoaded();
 		item();
-	} else if (request.type === "news") {
-		await contentLoaded();
-		const socialNewsExists = Array.from(document.querySelectorAll("h3")).find(n => n.innerText === "Social News");
-		if (items.socialNews && !socialNewsExists) {
-			await createSocialNews();
-		}
-		if (items.newsPin) {
-			createPin(request.tab.url);
-		}
 	} else if (request.type === "article") {
 		if (!items.wideNews) return;
 		chrome.runtime.sendMessage({ text: "newsCSS" });
@@ -88,10 +85,22 @@ async function manageType(request) {
 		const backToTop = document.querySelector("a#article-back-to-top");
 		sidebar.appendChild(backToTop);
 		backToTop.style.marginBottom = "unset";
+	} else if (request.type === "news") {
+		await contentLoaded();
+		const socialNewsExists = Array.from(document.querySelectorAll("h3")).find(n => n.innerText === "Social News");
+		if (items.socialNews && !socialNewsExists) {
+			await createSocialNews();
+		}
+		if (items.newsPin) {
+			createPin(request.tab.url);
+		}
 	}
 }
 
 function createPin(url) {
+	const sidebar = document.querySelector("main aside.sidebar");
+	const tabs = document.querySelector("#tabs");
+	if (!sidebar || !tabs) return;
 	const time = document.getElementsByTagName("time");
 	const d1 = (new Date(time[0].dateTime)).getTime();
 	const d2 = (new Date(time[1].dateTime)).getTime();
@@ -114,6 +123,7 @@ function createPin(url) {
 async function createSocialNews() {
 	const sidebar = document.querySelector("main aside.sidebar");
 	const tabs = document.querySelector("#tabs");
+	if (!sidebar || !tabs) return;
 	const rect = tabs.getBoundingClientRect();
 	let totalHeight = 30;
 	for (const child of sidebar.children) {
@@ -129,8 +139,6 @@ async function createSocialNews() {
 	const remainingHeight = rect.height - totalHeight - header.getBoundingClientRect().height;
 	const res = await fetch("https://api.weirdgloop.org/runescape/social");
 	const json = await res.json();
-
-	// console.log("[CAL]", json);
 
 	const div = document.createElement("div");
 	div.style.maxHeight = `${remainingHeight}px`;
@@ -227,13 +235,10 @@ function item() {
 }
 
 function market() {
-	if (time) {
-		return;
-	}
 	const table = document.getElementsByTagName("table")[0];
-	if (!table) {
-		return;
-	}
+	if (!table) return;
+	const lastColCheck = document.querySelectorAll("table>:first-child>:last-child>:last-child")[0];
+	if (lastColCheck.innerText === "Wiki") return;
 	const wikiHead = document.createElement("th");
 	wikiHead.style.padding = "10px";
 	wikiHead.appendChild(document.createTextNode("Wiki"));
@@ -262,7 +267,6 @@ function market() {
 		td.classList.add("memberItem");
 		table.children[1].children[i].appendChild(td);
 	}
-	time = 1;
 }
 
 function changeValue(s, i, v) {
