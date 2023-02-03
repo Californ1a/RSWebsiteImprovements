@@ -79,12 +79,14 @@ async function manageType(request) {
 		await contentLoaded();
 		const sidebar = document.querySelector("aside.m-news-aside");
 		const article = document.querySelector(".c-news-article__inner");
-		if (article) {
+		if (sidebar && article) {
 			article.appendChild(sidebar);
 		}
 		const backToTop = document.querySelector("a#article-back-to-top");
-		sidebar.appendChild(backToTop);
-		backToTop.style.marginBottom = "unset";
+		if (backToTop) {
+			sidebar.appendChild(backToTop);
+			backToTop.style.marginBottom = "unset";
+		}
 	} else if (request.type === "news") {
 		await contentLoaded();
 		const socialNewsExists = Array.from(document.querySelectorAll("h3")).find(n => n.innerText === "Social News");
