@@ -68,3 +68,7 @@ ul.news-list {
 	float: right;
 	border: 0;
 }
+
+.sidebar-module h3 a:hover {
+	color: #fff2c5;
+}
