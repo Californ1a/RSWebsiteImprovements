@@ -59,7 +59,7 @@ ul.news-list {
 
 .news-list .news-image {
 	display: block;
-	margin: -20px 0.5em 0.5em 1em;
+	margin: 0px 0.5em 0.5em 1em;
 	/* margin: 0 0.5em 0.5em 1em; */
 	max-height: 50px;
 	max-width: 75px;
@@ -67,4 +67,17 @@ ul.news-list {
 	border-radius: 5px;
 	float: right;
 	border: 0;
+}
+
+.sidebar-module h3 a:hover {
+	color: #fff2c5;
+}
+
+#countchart>div>div {
+	margin: 0 auto;
+}
+
+.chart__set.chart__set--count .chart__main-title {
+	margin-top: 20px;
+	margin-bottom: 0;
 }

@@ -9,8 +9,43 @@
 		"matches": [
 			"*://*.runescape.com/*"
 		],
-		"js": ["src/content.js"],
 		"css": ["src/content.css"],
+		"run_at": "document_start"
+	}, {
+		"matches": [
+			"*://*.runescape.com/m=hiscore*"
+		],
+		"js": ["src/content/hiscore.js"],
+		"run_at": "document_start"
+	}, {
+		"matches": [
+			"*://*.runescape.com/m=itemdb_rs/*"
+		],
+		"js": ["src/content/market.js"],
+		"run_at": "document_start"
+	}, {
+		"matches": [
+			"*://*.runescape.com/*community",
+			"*://*.runescape.com/m=news/",
+			"*://*.runescape.com/m=news/a=*/",
+			"*://*.runescape.com/m=news/c=*/",
+			"*://*.runescape.com/m=news/a=*/c=*/",
+			"*://*.runescape.com/m=news/archive*",
+			"*://*.runescape.com/m=news/a=*/archive*",
+			"*://*.runescape.com/m=news/c=*/archive*",
+			"*://*.runescape.com/m=news/a=*/c=*/archive*",
+			"*://*.runescape.com/m=news/?*",
+			"*://*.runescape.com/m=news/a=*/?*",
+			"*://*.runescape.com/m=news/c=*/?*",
+			"*://*.runescape.com/m=news/a=*/c=*/?*"
+		],
+		"js": ["src/content/news.js"],
+		"run_at": "document_start"
+	}, {
+		"matches": [
+			"*://*.runescape.com/m=news/*"
+		],
+		"js": ["src/content/article.js"],
 		"run_at": "document_start"
 	}],
 	"web_accessible_resources": [{
@@ -24,7 +59,7 @@
 	}],
 	"manifest_version": 3,
 	"name": "RuneScape Website Improvements",
-	"version": "0.5.10",
+	"version": "0.6.0",
 	"author": "Californ1a",
 
 	"description": "Improve the RS website! Toggle virtual levels on RS3 and OSRS hiscores, and add wiki links to GE market search.",
