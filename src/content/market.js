@@ -33,7 +33,9 @@ function market() {
 		td.style.paddingLeft = "17px";
 		// if (headRow) {
 		const span = rows[i].children[0].children[0].children[1];
-		span.style = "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;";
+		const page = document.querySelector("h3").innerText;
+		const width = (page === "Search Results") ? "230px" : (page === "Most Valuable Trades") ? "130px" : "170px";
+		span.style = `white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:${width}`;
 		if (span.innerText.includes("...")) {
 			span.innerText = itemImg.alt;
 		}
