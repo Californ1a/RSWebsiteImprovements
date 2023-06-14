@@ -141,10 +141,10 @@ async function createSocialNews() {
 		item.title = item.title ?? "-";
 		if (item.source === "runescape") continue;
 
-		if (item.icon) {
+		if (item.icon && item.icon !== "https://twitter.com/favicon-32x32.png") {
 			const s = item.source;
 			icon = `<img src="${item.icon}" alt="${s[0].toUpperCase() + s.slice(1)} logo" class="news-icon">`;
-		} else if (item.source === "twitter") {
+		} else if (item.source === "twitter" || item.source === "nitter") {
 			icon = "<img src='https://runescape.wiki/images/thumb/Twitter_news_icon.svg/240px-Twitter_news_icon.svg.png' alt='Twitter logo' class='news-icon'>";
 		} else if (item.source === "reddit") {
 			icon = "<img src='https://runescape.wiki/images/thumb/Reddit_news_icon.svg/240px-Reddit_news_icon.svg.png' alt='Reddit logo' class='news-icon'>";

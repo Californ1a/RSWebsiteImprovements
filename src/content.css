@@ -59,7 +59,7 @@ ul.news-list {
 
 .news-list .news-image {
 	display: block;
-	margin: -20px 0.5em 0.5em 1em;
+	margin: 0px 0.5em 0.5em 1em;
 	/* margin: 0 0.5em 0.5em 1em; */
 	max-height: 50px;
 	max-width: 75px;
