@@ -137,7 +137,9 @@ async function createSocialNews() {
 
 	for (const item of json) {
 		let icon = "";
-		item.source = item.source ?? (new URL(item.url)).hostname.split(".")[1];
+		const hostname = (new URL(item.url)).hostname;
+		const hostParts = hostname.split(".");
+		item.source = item.source ?? hostParts[hostParts.length - 2];
 		item.title = item.title ?? "-";
 		if (item.source === "runescape") continue;
 
