@@ -5,6 +5,7 @@
 		"browser": true
 	},
 	"extends": "eslint:recommended",
+	"root": true,
 	"parserOptions": {
 		"ecmaVersion": 13,
 		"sourceType": "module",

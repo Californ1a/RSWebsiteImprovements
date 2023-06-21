@@ -144,11 +144,23 @@ async function OSRSolo(skills) {
 	OSTotal(skills, 15, 4, 131, true);
 }
 
+function imgErrorFunction() {
+	this.src += `?${Date.now()}`;
+}
+
+function fixAvatars() {
+	const avatars = document.querySelectorAll(".avatar");
+	for (let i = 0; i < avatars.length; i++) {
+		avatars[i].onerror = imgErrorFunction;
+	}
+}
+
 (async function main() {
 	const i = ["rs3Virt", "osrsVirt"];
 	const items = await chrome.storage.sync.get(i);
 	const url = window.location.href;
 	await contentLoaded();
+	fixAvatars();
 	const skills = document.getElementsByTagName("td");
 	if (items.osrsVirt && url.includes("oldschool")) {
 		if (url.includes("oldschool") && url.includes("compare")) {
