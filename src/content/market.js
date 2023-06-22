@@ -34,7 +34,7 @@ function market() {
 		// if (headRow) {
 		const span = rows[i].children[0].children[0].children[1];
 		const page = document.querySelector("h3").innerText;
-		const width = (page === "Search Results") ? "230px" : (page === "Most Valuable Trades") ? "130px" : "170px";
+		const width = (page === "Search Results") ? "230px" : (page === "Most Valuable Trades") ? "130px" : "150px";
 		span.style = `white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:${width}`;
 		if (span.innerText.includes("...")) {
 			span.innerText = itemImg.alt;
