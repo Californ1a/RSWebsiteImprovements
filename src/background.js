@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener(async (msg, sender) => {
 	if (msg.text === "newsCSS") {
 		try {
 			await chrome.scripting.insertCSS({
-				files: ["src/news.css"],
+				files: ["src/content/news-article.css"],
 				target: {
 					tabId: sender.tab.id
 				}

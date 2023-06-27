@@ -40,6 +40,7 @@
 			"*://*.runescape.com/m=news/a=*/c=*/?*"
 		],
 		"js": ["src/content/news.js"],
+		"css": ["src/content/news-social.css"],
 		"run_at": "document_start"
 	}, {
 		"matches": [
