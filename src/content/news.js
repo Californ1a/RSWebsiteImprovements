@@ -23,9 +23,9 @@ function createPin(url) {
 			text-shadow: 0 0 0 #e1bb34;
 		}`;
 	if (url.includes("news")) {
-		sheet.insertRule(`.index article:first-child::before ${style}`);
+		sheet.insertRule(`#newsContent .index article:first-of-type::before ${style}`);
 	} else {
-		sheet.insertRule(`.index article:first-child::before ${style}`);
+		sheet.insertRule(`.index#newsSection article:first-of-type::before ${style}`);
 	}
 }
 
