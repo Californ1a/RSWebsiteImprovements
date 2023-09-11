@@ -1,0 +1,25 @@
+[{
+	"id": "rs3Virt",
+	"name": "RS3 Virtual Levels",
+	"title": "Display virtual levels on RS3 hiscores pages."
+}, {
+	"id": "osrsVirt",
+	"name": "OSRS Virtual Levels",
+	"title": "Display virtual levels on OSRS hiscores pages."
+}, {
+	"id": "wikiLinks",
+	"name": "GE Wiki Buttons",
+	"title": "Add a wiki button column to GE market search, and a wiki button on individual item pages."
+}, {
+	"id": "newsPin",
+	"name": "Pinned News Post",
+	"title": "Add a pin icon next to the #1 news post if the date is older than the #2 news post."
+}, {
+	"id": "socialNews",
+	"name": "Social News Sidebar",
+	"title": "Add a Social News sidebar widget to the homepage and news list/archive pages."
+}, {
+	"id": "wideNews",
+	"name": "Wide News Pages",
+	"title": "Give the news posts a makeover, using more screen width."
+}]

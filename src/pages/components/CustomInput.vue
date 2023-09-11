@@ -1,33 +1,49 @@
-body {
-	width: 180px;
-	user-select: none;
-	overflow: hidden;
-}
+<template>
+	<div class="container" :title="title">
+		<label :class="classObj">
+			<div class="label" :class="classObj">{{ name }}</div>
+			<input v-if="type === 'checkbox'"
+				:id="id"
+				type="checkbox"
+				:name="id"
+				checked />
+			<span v-if="type === 'checkbox'" class="slider round" />
+			<select v-else-if="type === 'select'" :id="id" :name="id">
+				<slot />
+			</select>
+		</label>
+	</div>
+</template>
 
-#status {
-	text-align: right;
-	width: 55%;
-	float: right;
-	margin-right: 5px;
-	margin-top: 5px;
-	margin-bottom: 5px;
-}
+<script setup>
+import { defineProps, computed } from 'vue';
 
-#status.fade {
-	animation: fadeOut 2s forwards;
-	animation-delay: 2s;
-}
+const props = defineProps({
+	id: {
+		type: String,
+		required: true,
+	},
+	name: {
+		type: String,
+		required: true,
+	},
+	title: {
+		type: String,
+		required: true,
+	},
+	type: {
+		type: String,
+		required: true,
+	},
+});
 
-@keyframes fadeOut {
-	from {
-		opacity: 1;
-	}
+const classObj = computed(() => ({
+	switch: props.type === 'checkbox',
+	select: props.type === 'select',
+}));
+</script>
 
-	to {
-		opacity: 0;
-	}
-}
-
+<style scoped>
 .container {
 	height: 17px;
 	width: 98%;
@@ -117,3 +133,4 @@ select {
 	font-size: 12px;
 	padding: 0;
 }
+</style>

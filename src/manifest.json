@@ -1,6 +1,31 @@
 {
+	"{{chrome}}.manifest_version": 3,
+	"{{firefox}}.manifest_version": 3,
+	"name": "RuneScape Website Improvements",
+	"description": "Improve the RS website! Toggle virtual levels on RS3 and OSRS hiscores, and add wiki links to GE market search.",
+	"author": "Californ1a",
+	"homepage_url": "https://github.com/Californ1a/RSWebsiteImprovements",
+	"permissions": ["tabs", "storage", "scripting"],
+	"icons": {
+		"16": "icon/skillicon-16.png",
+		"48": "icon/skillicon-48.png",
+		"128": "icon/skillicon-128.png"
+	},
+	"action": {
+		"default_popup": "src/popup.html",
+		"default_icon": {
+			"16": "icon/skillicon-16.png",
+			"48": "icon/skillicon-48.png"
+		}
+	},
+	"{{firefox}}.browser_specific_settings": {
+		"gecko": {
+			"id": "rs-website-improve@californ1a.github.io"
+		}
+	},
 	"background": {
-		"service_worker": "src/background.js"
+		"{{chrome}}.service_worker": "src/background.js",
+		"{{firefox}}.scripts": ["src/background.js"]
 	},
 	"host_permissions": [
 		"*://*.runescape.com/*"
@@ -9,7 +34,7 @@
 		"matches": [
 			"*://*.runescape.com/*"
 		],
-		"css": ["src/content.css"],
+		"js": ["src/content.js"],
 		"run_at": "document_start"
 	}, {
 		"matches": [
@@ -44,7 +69,6 @@
 			"*://*.runescape.com/m=news/a=*/c=*/?*"
 		],
 		"js": ["src/content/news.js"],
-		"css": ["src/content/news-social.css"],
 		"run_at": "document_start"
 	}, {
 		"matches": [
@@ -61,26 +85,5 @@
 		"matches": [
 			"*://*.runescape.com/*"
 		]
-	}],
-	"manifest_version": 3,
-	"name": "RuneScape Website Improvements",
-	"version": "0.6.1",
-	"author": "Californ1a",
-
-	"description": "Improve the RS website! Toggle virtual levels on RS3 and OSRS hiscores, and add wiki links to GE market search.",
-	"homepage_url": "https://github.com/Californ1a/RSWebsiteImprovements",
-
-	"permissions": ["tabs", "storage", "scripting"],
-	"action": {
-		"default_icon": {
-			"16": "assets/skillicon-16.png",
-			"48": "assets/skillicon-48.png"
-		},
-		"default_popup": "src/popup/index.html"
-	},
-	"icons": {
-		"16": "assets/skillicon-16.png",
-		"48": "assets/skillicon-48.png",
-		"128": "assets/skillicon-128.png"
-	}
+	}]
 }
